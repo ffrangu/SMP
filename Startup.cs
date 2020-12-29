@@ -36,8 +36,8 @@ namespace SMP
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            //services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //    .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddDefaultIdentity<ApplicationUser>(options =>
             {
@@ -55,11 +55,11 @@ namespace SMP
 
             services.AddMvc(setupAction =>
             {
-                var policy = new AuthorizationPolicyBuilder()
-                .RequireAuthenticatedUser()
-                .Build();
+                //var policy = new AuthorizationPolicyBuilder()
+                //.RequireAuthenticatedUser()
+                //.Build();
 
-                setupAction.Filters.Add(new AuthorizeFilter(policy));
+                //setupAction.Filters.Add(new AuthorizeFilter(policy));
 
                 setupAction.EnableEndpointRouting = false;
             })
