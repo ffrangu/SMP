@@ -55,11 +55,11 @@ namespace SMP
 
             services.AddMvc(setupAction =>
             {
-                //var policy = new AuthorizationPolicyBuilder()
-                //.RequireAuthenticatedUser()
-                //.Build();
+                var policy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
 
-                //setupAction.Filters.Add(new AuthorizeFilter(policy));
+                setupAction.Filters.Add(new AuthorizeFilter(policy));
 
                 setupAction.EnableEndpointRouting = false;
             })

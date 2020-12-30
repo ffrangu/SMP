@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SMP.Data;
 using SMP.Models;
 
 namespace SMP.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager) : base(_roleManager, _userManager)
         {
-            _logger = logger;
+            //_logger = logger;
         }
 
         public IActionResult Index()
