@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using SMP.Models;
 
 namespace SMP
 {
@@ -55,11 +56,11 @@ namespace SMP
 
             services.AddMvc(setupAction =>
             {
-                var policy = new AuthorizationPolicyBuilder()
-                .RequireAuthenticatedUser()
-                .Build();
+                //var policy = new AuthorizationPolicyBuilder()
+                //.RequireAuthenticatedUser()
+                //.Build();
 
-                setupAction.Filters.Add(new AuthorizeFilter(policy));
+                //setupAction.Filters.Add(new AuthorizeFilter(policy));
 
                 setupAction.EnableEndpointRouting = false;
             })
@@ -101,6 +102,8 @@ namespace SMP
             {
                 options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
             });
+
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
