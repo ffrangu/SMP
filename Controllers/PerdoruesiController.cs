@@ -48,8 +48,11 @@ namespace SMP.Controllers
         }
 
         // GET: PerdoruesiController/Create
-        public ActionResult Create()
+        public async Task<ActionResult> CreateAsync()
         {
+            ViewBag.RoleId = await LoadRoles(null);
+            ViewBag.AddError = false;
+
             return View();
         }
 
