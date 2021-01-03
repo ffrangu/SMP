@@ -20,5 +20,15 @@ namespace SMP.Data
 
         [StringLength(64, MinimumLength = 3)]
         public string LastName { get; set; }
+
+        [MaxLength]
+        public string Image { get; set; }
+
+
+        [StringLength(200, MinimumLength = 3)]
+        public string Address { get; set; }
+
+        public string GetFullName { get { return FirstName + " " + LastName; } }
+
     }
 }

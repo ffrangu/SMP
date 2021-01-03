@@ -19,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using SMP.Models;
+using SMP.Helpers;
 
 namespace SMP
 {
@@ -54,13 +55,16 @@ namespace SMP
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddScoped<AlertService>();
+
+
             services.AddMvc(setupAction =>
             {
-                //var policy = new AuthorizationPolicyBuilder()
-                //.RequireAuthenticatedUser()
-                //.Build();
+                var policy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
 
-                //setupAction.Filters.Add(new AuthorizeFilter(policy));
+                setupAction.Filters.Add(new AuthorizeFilter(policy));
 
                 setupAction.EnableEndpointRouting = false;
             })
@@ -74,7 +78,7 @@ namespace SMP
                 options.Cookie.IsEssential = true;
             });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
             services.AddHttpContextAccessor();
 

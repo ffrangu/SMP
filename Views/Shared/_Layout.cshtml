@@ -31,7 +31,7 @@
     <div id="kt_header_mobile" class="header-mobile header-mobile-fixed">
         <!--begin::Logo-->
         <a href="@Url.Action("Index","Home")">
-           <span>SMP</span>
+            <span>SMP</span>
         </a>
         <!--end::Logo-->
         <!--begin::Toolbar-->
@@ -120,14 +120,42 @@
                                                             <ul class="menu-subnav">
                                                                 @foreach (var sub in item.SubMenu)
                                                                 {
-                                                                    <li class="menu-item @(sub.Selected ? "menu-item-active":"")" aria-haspopup="true">
-                                                                        <a href="@Url.Action(sub.Action,sub.Controller)" class="menu-link">
-                                                                            <i class="menu-bullet menu-bullet-line">
-                                                                                <span></span>
-                                                                            </i>
-                                                                            <span class="menu-text">@sub.Text</span>
-                                                                        </a>
-                                                                    </li>
+                                                                    if (sub.SubMenu.Count > 0)
+                                                                    {
+                                                                        <li class="menu-item menu-item-submenu menu-item-rel @(sub.Selected ? "menu-item-open menu-item-here":"")" data-menu-toggle="click" aria-haspopup="true">
+                                                                            <a href="javascript:;" class="menu-link menu-toggle">
+                                                                                <span class="menu-text">@sub.Text</span>
+                                                                                <span class="menu-desc"></span>
+                                                                                <i class="menu-arrow"></i>
+                                                                            </a>
+                                                                            <div class="menu-submenu menu-submenu-classic menu-submenu-right">
+                                                                                <ul class="menu-subnav">
+                                                                                    @foreach (var subsub in sub.SubMenu)
+                                                                                    {
+                                                                                        <li class="menu-item @(subsub.Selected ? "menu-item-active":"")" aria-haspopup="true">
+                                                                                            <a href="@Url.Action(subsub.Action,subsub.Controller)" class="menu-link">
+                                                                                                <i class="menu-bullet menu-bullet-line">
+                                                                                                    <span></span>
+                                                                                                </i>
+                                                                                                <span class="menu-text">@subsub.Text</span>
+                                                                                            </a>
+                                                                                        </li>
+                                                                                    }
+                                                                                </ul>
+                                                                            </div>
+                                                                        </li>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <li class="menu-item @(sub.Selected ? "menu-item-active":"")" aria-haspopup="true">
+                                                                            <a href="@Url.Action(sub.Action,sub.Controller)" class="menu-link">
+                                                                                <i class="menu-bullet menu-bullet-line">
+                                                                                    <span></span>
+                                                                                </i>
+                                                                                <span class="menu-text">@sub.Text</span>
+                                                                            </a>
+                                                                        </li>
+                                                                    }
                                                                 }
 
                                                             </ul>
@@ -401,7 +429,6 @@
                         </div>
                         <!--end::Info-->
                         <!--begin::Toolbar-->
-
                         <!--end::Toolbar-->
                     </div>
                 </div>
@@ -1261,5 +1288,39 @@
     <script src="~/assets/js/pages/features/forms/widgets/select2.js"></script>
     <script src="~/assets/js/pages/features/charts/apexcharts.js"></script>
     @RenderSection("Scripts", required: false)
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(".init-select2").select2();
+            $('.datepicker').datepicker({
+                format: "dd/mm/yyyy",
+                autoclose: true,
+            });
+            $('#userTable').DataTable({
+                "bSort": true,
+                "bLengthChange": false
+            });
+
+            $('#data-table').DataTable({
+                "bSort": true,
+                "bLengthChange": false
+            });
+
+            $('#data-table-nosort').DataTable({
+                "bSort": false,
+                "bLengthChange": false,
+                "searching": true,              // Searchbox
+                "dom": '<"top"f>rt<"bottom"lp><"clear">', // Positions table elements
+                "language": {
+                    "search": "_INPUT_",            // Removes the 'Search' field label
+                    "searchPlaceholder": "Search"   // Placeholder for the search box
+                },
+                "search": {
+                    "addClass": 'form-control input-lg col-xs-12'
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>
