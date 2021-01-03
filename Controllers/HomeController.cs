@@ -13,7 +13,7 @@ namespace SMP.Controllers
 {
     public class HomeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
+        //private readonly ILogger<HomeController> _logger;
 
         public HomeController(RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager) : base(_roleManager, _userManager)
         {
