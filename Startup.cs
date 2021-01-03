@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using SMP.Models;
 using SMP.Helpers;
+using SMP.Models.Bank;
 
 namespace SMP
 {
@@ -107,7 +108,9 @@ namespace SMP
                 options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
             });
 
+
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IBankRepository, BankRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
