@@ -11,7 +11,7 @@ using SMP.Data;
 
 namespace SMP.Areas.Identity.Pages.Account.Manage
 {
-    public class ChangePasswordModel : PageModel
+    public class ChangePasswordModel : BaseModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -20,7 +20,7 @@ namespace SMP.Areas.Identity.Pages.Account.Manage
         public ChangePasswordModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<ChangePasswordModel> logger)
+            ILogger<ChangePasswordModel> logger) : base(userManager, signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -35,20 +35,19 @@ namespace SMP.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
-            [Required]
             [DataType(DataType.Password)]
-            [Display(Name = "Current password")]
-            public string OldPassword { get; set; }
+            [Required(ErrorMessage = "Plotësoni fushën")]
+            [Display(Name = "Fjalëkalimi i tanishëm")]
+            public string CurrentPassword { get; set; }
 
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "New password")]
+            [Required(ErrorMessage = "Plotësoni fushën")]
+            [Display(Name = "Fjalëkalimi i ri")]
             public string NewPassword { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm new password")]
-            [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+            [Display(Name = "Konfirmo fjalëkalimin")]
+            [Compare("NewPassword", ErrorMessage = "Fjalëkalimet nuk përputhen")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -57,7 +56,7 @@ namespace SMP.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Perdoruesi me kete ID '{_userManager.GetUserId(User)}' nuk mund te gjendet.");
             }
 
             var hasPassword = await _userManager.HasPasswordAsync(user);
@@ -65,6 +64,8 @@ namespace SMP.Areas.Identity.Pages.Account.Manage
             {
                 return RedirectToPage("./SetPassword");
             }
+
+            AddUserToSession();
 
             return Page();
         }
@@ -79,22 +80,24 @@ namespace SMP.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Perdoruesi me kete ID '{_userManager.GetUserId(User)}' nuk mund te gjendet.");
             }
 
-            var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
+            var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.CurrentPassword, Input.NewPassword);
             if (!changePasswordResult.Succeeded)
             {
                 foreach (var error in changePasswordResult.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
+
+                AddUserToSession();
                 return Page();
             }
 
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("User changed their password successfully.");
-            StatusMessage = "Your password has been changed.";
+            StatusMessage = "Fjalëkalimi është ndryshuar me sukses";
 
             return RedirectToPage();
         }

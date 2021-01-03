@@ -1,41 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using SMP.Data;
 using SMP.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace SMP.Controllers
+namespace SMP.Areas.Identity.Pages.Account.Manage
 {
-    public class BaseController : Controller
+    public class BaseModel : PageModel
     {
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly RoleManager<IdentityRole> roleManager;
         protected UserModel user;
 
-        public BaseController(RoleManager<IdentityRole> _roleManager,/* ILogger<LoginModel> logger,*/ UserManager<ApplicationUser> _userManager)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+
+        public BaseModel(
+    UserManager<ApplicationUser> userManager,
+    SignInManager<ApplicationUser> signInManager)
         {
-            userManager = _userManager;
-            roleManager = _roleManager;
-            //_logger = logger;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        protected void AddUserToSession()
         {
-            string cookie = Request.Cookies["lang"];
-            string cultureName = cookie == null ? "en-US" : cookie.ToString();
-
-            if (filterContext.HttpContext.User.Identity.IsAuthenticated)
+            if (User.Identity.IsAuthenticated)
             {
-                var currentUser = userManager.Users.FirstOrDefault(t => t.UserName == User.Identity.Name);
-                var currentRole = userManager.GetRolesAsync(currentUser).Result[0];
+                var currentUser = _userManager.Users.FirstOrDefault(t => t.UserName == User.Identity.Name);
+                var currentRole = _userManager.GetRolesAsync(currentUser).Result[0];
 
                 user = new UserModel
                 {
@@ -47,12 +41,11 @@ namespace SMP.Controllers
                     UserId = currentUser.Id,
                     UserName = currentUser.UserName,
                     RoleDescription = currentRole,
-                    //Picture = currentUser.Image
+                    Picture = currentUser.Image
                 };
             }
             else
             {
-                //var cultureName = CultureInfo.CurrentCulture.Name;
                 user = new UserModel
                 {
                     Role = "0",
@@ -60,17 +53,7 @@ namespace SMP.Controllers
                 };
             }
 
-            CultureInfo culture = new System.Globalization.CultureInfo(cultureName);
-
-            // Modify current thread's cultures            
-            Thread.CurrentThread.CurrentCulture = culture;
-            //Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(cultureName); ;
-            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
-
-
-            Thread.CurrentThread.CurrentCulture.NumberFormat = new CultureInfo("en-US").NumberFormat;
-
-            ViewBag.Menus = GetMenus(user.RoleDescription);
+            ViewData["Menus"] = GetMenus(user.RoleDescription);
             ViewData["User"] = user;
         }
 
@@ -175,56 +158,29 @@ namespace SMP.Controllers
 
             menus.RemoveAll(item => item == null);
 
-            string action = ControllerContext.RouteData.Values["action"].ToString();
-            string controller = ControllerContext.RouteData.Values["controller"].ToString();
+            //string action = ControllerContext.RouteData.Values["action"].ToString();
+            //string controller = ControllerContext.RouteData.Values["controller"].ToString();
 
-            foreach (var item in menus)
-            {
-                if (item.Controller == controller || item.SubMenu.Select(x => x.Controller).Contains(controller))
-                {
-                    item.Selected = true;
-                }
+            //foreach (var item in menus)
+            //{
+            //    if (item.Controller == controller || item.SubMenu.Select(x => x.Controller).Contains(controller))
+            //    {
+            //        item.Selected = true;
+            //    }
 
-                foreach (var subItem in item.SubMenu)
-                {
-                    if (subItem.Controller == controller && (subItem.Action == action || subItem.IncludedActions.Contains(action)))
-                    {
-                        item.Selected = true;
-                        subItem.Selected = true;
-                    }
-                }
-            }
+            //    foreach (var subItem in item.SubMenu)
+            //    {
+            //        if (subItem.Controller == controller && (subItem.Action == action || subItem.IncludedActions.Contains(action)))
+            //        {
+            //            item.Selected = true;
+            //            subItem.Selected = true;
+            //        }
+            //    }
+            //}
 
 
             return menus;
         }
 
-        #region Select lists
-        public async Task<SelectList> LoadRoles(string selected, string exclude)
-        {
-            var roles = await roleManager.Roles.Select(q => new { q.Id, q.Name }).ToListAsync();
-
-            if (!string.IsNullOrEmpty(exclude))
-            {
-                roles = roles.Where(q => q.Name != exclude).ToList();
-            }
-
-            if (!string.IsNullOrEmpty(selected))
-            {
-                return new SelectList(roles, "Id", "Name", selected);
-            }
-
-            return new SelectList(roles, "Id", "Name");
-        }
-
-        #endregion
-
-        protected void AddErrors(IdentityResult result)
-        {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError("", error.Description);
-            }
-        }
     }
 }
