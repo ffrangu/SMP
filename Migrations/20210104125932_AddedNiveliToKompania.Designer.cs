@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SMP.Data;
 
-namespace SMP.Data.Migrations
+namespace SMP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210104125932_AddedNiveliToKompania")]
+    partial class AddedNiveliToKompania
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,9 +172,6 @@ namespace SMP.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("DepartamentiId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(256)")
@@ -187,9 +186,6 @@ namespace SMP.Data.Migrations
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("KompaniaId")
-                        .HasColumnType("int");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(64)")
@@ -230,10 +226,6 @@ namespace SMP.Data.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DepartamentiId");
-
-                    b.HasIndex("KompaniaId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -752,17 +744,6 @@ namespace SMP.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("SMP.Data.ApplicationUser", b =>
-                {
-                    b.HasOne("SMP.Data.Departamenti", "Departamenti")
-                        .WithMany()
-                        .HasForeignKey("DepartamentiId");
-
-                    b.HasOne("SMP.Data.Kompania", "Kompania")
-                        .WithMany()
-                        .HasForeignKey("KompaniaId");
                 });
 
             modelBuilder.Entity("SMP.Data.Bonuset", b =>

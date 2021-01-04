@@ -26,7 +26,6 @@ namespace SMP.Controllers
         {
             userManager = _userManager;
             roleManager = _roleManager;
-            //_logger = logger;
         }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)

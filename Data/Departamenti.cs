@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SMP.Data
 {
@@ -11,6 +12,7 @@ namespace SMP.Data
             Punetori = new HashSet<Punetori>();
         }
 
+        [Key]
         public int Id { get; set; }
         public int KompaniaId { get; set; }
         public string Emri { get; set; }

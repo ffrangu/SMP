@@ -30,5 +30,11 @@ namespace SMP.Data
 
         public string GetFullName { get { return FirstName + " " + LastName; } }
 
+        public int? KompaniaId { get; set; }
+
+        public int? DepartamentiId { get; set; }
+
+        public virtual Kompania Kompania { get; set; }
+        public virtual Departamenti Departamenti { get; set; }
     }
 }

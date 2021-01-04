@@ -18,6 +18,8 @@ namespace SMP.Data
         public string Kodi { get; set; }
         public string Emri { get; set; }
 
+        public int Niveli { get; set; }
+
         public virtual Komuna Komuna { get; set; }
         public virtual ICollection<Departamenti> Departamenti { get; set; }
         public virtual ICollection<Pozita> Pozita { get; set; }
