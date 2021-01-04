@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SMP.Data;
 using SMP.Helpers;
 using SMP.Models.Departamenti;
+using SMP.Models.Kompania;
 using SMP.ViewModels.Departamenti;
 using System;
 using System.Collections.Generic;
@@ -21,13 +22,16 @@ namespace SMP.Controllers
 
         private IDepartamentiRepository departamentiRepository;
 
-        public DepartamentiController(IDepartamentiRepository _departamentiRepository,RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager, AlertService _alertService)
+        private IKompaniaRepository kompaniaRepository;
+
+        public DepartamentiController(IDepartamentiRepository _departamentiRepository, IKompaniaRepository _kompaniaRepository, RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager, AlertService _alertService)
         : base(_roleManager, _userManager)
         {
             alertService = _alertService;
             userManager = _userManager;
             roleManager = _roleManager;
             departamentiRepository = _departamentiRepository;
+            kompaniaRepository = _kompaniaRepository;
 
         }
 
@@ -67,45 +71,117 @@ namespace SMP.Controllers
         }
 
         // GET: DepartamentiController/Create
-        public ActionResult Create()
+        public async Task<ActionResult> CreateAsync()
         {
+            
+            ViewBag.Kompania = await kompaniaRepository.KompaniaSelectList(null, false, false);
             return View();
         }
 
         // POST: DepartamentiController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> CreateAsync(DepartamentiCreateViewModel model)
         {
-            try
+            if(ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    var addDepartament = new Departamenti
+                    {
+                        KompaniaId = model.KompaniaId,
+                        Emri = model.Emri,
+                        Shkurtesa = model.Shkurtesa,
+                        Status = model.Status,
+                        Created = DateTime.Now,
+                        CreatedBy = user.UserName
+                    };
+
+                    var result = await departamentiRepository.AddAsync(addDepartament);
+                    alertService.Success("Departamenti u shtua me sukses!");
+                    return RedirectToAction("Index");
+                }
+                catch (Exception)
+                {
+                    alertService.Danger("Diqka shkoi gabim, provoni perseri!");
+                    return View(model);
+                }
             }
-            catch
-            {
-                return View();
-            }
+            alertService.Information("Plotesoni te gjitha fushat!");
+            return View(model);
         }
 
         // GET: DepartamentiController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> EditAsync(int? id)
         {
-            return View();
+
+            ViewBag.AddError = false;
+
+            if (id == null)
+            {
+                ViewBag.ErrorTitle = $"Id cannot be null";
+                return View("_NotFound");
+            }
+            var grada = await departamentiRepository.Get(id);
+
+            if (grada == null)
+            {
+                ViewBag.ErrorTitle = $"Pozita me këtë { id } nuk është gjetur!";
+                return View("_NotFound");
+            }
+
+            DepartamentiEditViewModel model = new DepartamentiEditViewModel
+            {
+                Id = grada.Id,
+                Emri = grada.Emri,
+                KompaniaId = grada.KompaniaId,
+                Created = grada.Created,
+                CreatedBy = grada.CreatedBy,
+                Status = grada.Status,
+                Shkurtesa = grada.Shkurtesa
+            };
+
+            
+            ViewBag.Kompania = await kompaniaRepository.KompaniaSelectList(grada.KompaniaId, false, false);
+
+            return View(model);
+
         }
 
         // POST: DepartamentiController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> EditAsync(DepartamentiEditViewModel model)
         {
-            try
+            if(ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    var editDepartament = await departamentiRepository.Get(model.Id);
+                    editDepartament.KompaniaId = model.KompaniaId;
+                    editDepartament.Emri = model.Emri;
+                    editDepartament.Shkurtesa = model.Shkurtesa;
+                    editDepartament.Status = model.Status;
+                    editDepartament.Created = DateTime.Now;
+                    editDepartament.CreatedBy = user.UserName;
+
+                    var editedDepartment = await departamentiRepository.Update(editDepartament);
+
+                    alertService.Success("Departamenti u editua me sukses!");
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception)
+                {
+
+                    alertService.Danger("Diqka shkoi keq!");
+                    return View(model);
+                }
             }
-            catch
-            {
-                return View();
-            }
+
+            alertService.Information("Mbushi te gjitha fushat!");
+
+            return View(model);
         }
 
         // GET: DepartamentiController/Delete/5
