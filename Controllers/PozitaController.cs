@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SMP.Data;
 using SMP.Helpers;
+using SMP.Models.Departamenti;
+using SMP.Models.Kompania;
 using SMP.Models.Pozita;
 using SMP.ViewModels.Pozita;
 
@@ -21,8 +23,12 @@ namespace SMP.Controllers
 
         private IPozitaRepository pozitaRepository;
 
+        private IDepartamentiRepository departamentiRepository;
 
-        public PozitaController(IPozitaRepository _pozitaRepository, RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager,
+        private IKompaniaRepository kompaniaRepository;
+
+
+        public PozitaController(IPozitaRepository _pozitaRepository,IDepartamentiRepository _departamentiRepository,IKompaniaRepository _kompaniaRepository, RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager,
             AlertService _alertService)
             : base(_roleManager, _userManager)
         {
@@ -30,6 +36,8 @@ namespace SMP.Controllers
             roleManager = _roleManager;
             alertService = _alertService;
             pozitaRepository = _pozitaRepository;
+            departamentiRepository = _departamentiRepository;
+            kompaniaRepository = _kompaniaRepository;
         }
 
 
@@ -69,43 +77,120 @@ namespace SMP.Controllers
         // GET: PozitaController/Create
         public async Task<ActionResult> CreateAsync()
         {
+            ViewBag.Departamenti = await departamentiRepository.DepartamentiSelectList(null,false,false);
+            ViewBag.Kompania = await kompaniaRepository.KompaniaSelectList(null, false, false);
             return View();
         }
 
         // POST: PozitaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> CreateAsync(PozitaCreateViewModel model)
         {
-            try
+            if(ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    var addPozite = new Pozita
+                    {
+                        KompaniaId = model.KompaniaId,
+                        DepartamentiId = model.DepartamentiId,
+                        Emri = model.Emri,
+                        Status = model.Status,
+                        Created = DateTime.Now,
+                        CreatedBy = user.UserName
+
+                    };
+
+                    var result = await pozitaRepository.AddAsync(addPozite);
+
+                    alertService.Success("Pozita u shtua me sukses!");
+
+                    return RedirectToAction("Index");
+                }
+                catch (Exception)
+                {
+
+                    alertService.Danger("Diqka shkoi gabim, provoni perseri!");
+                    return View(model);
+                }
             }
-            catch
-            {
-                return View();
-            }
+            alertService.Information("Plotesoni te gjitha fushat!");
+            return View(model);
         }
 
         // GET: PozitaController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> EditAsync(int? id)
         {
-            return View();
+
+            ViewBag.AddError = false;
+
+            if (id == null)
+            {
+                ViewBag.ErrorTitle = $"Id cannot be null";
+                return View("_NotFound");
+            }
+            var grada = await pozitaRepository.Get(id);
+
+            if (grada == null)
+            {
+                ViewBag.ErrorTitle = $"Pozita me këtë { id } nuk është gjetur!";
+                return View("_NotFound");
+            }
+
+            PozitaEditViewModel model = new PozitaEditViewModel
+            {
+                Id = grada.Id,
+                Emri = grada.Emri,
+                KompaniaId = grada.KompaniaId,
+                DepartamentiId = grada.DepartamentiId,
+                Created = grada.Created,
+                CreatedBy = grada.CreatedBy,
+                Status = grada.Status
+            };
+
+            ViewBag.Departamenti = await departamentiRepository.DepartamentiSelectList(grada.DepartamentiId, false, false);
+            ViewBag.Kompania = await kompaniaRepository.KompaniaSelectList(grada.KompaniaId, false, false);
+
+            return View(model);
+            
         }
 
         // POST: PozitaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> EditAsync(PozitaEditViewModel model)
         {
-            try
+            if(ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    var editPozita = await pozitaRepository.Get(model.Id);
+                    editPozita.KompaniaId = model.KompaniaId;
+                    editPozita.DepartamentiId = model.DepartamentiId;
+                    editPozita.Created = DateTime.Now;
+                    editPozita.CreatedBy = user.UserName;
+                    editPozita.Emri = model.Emri;
+                    editPozita.Status = model.Status;
+
+                    var editedPozita = await pozitaRepository.Update(editPozita);
+
+                    alertService.Success("Pozita u editua me sukses!");
+
+
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception)
+                {
+
+                    alertService.Danger("Diqka shkoi keq!");
+                    return View(model);
+                }
             }
-            catch
-            {
-                return View();
-            }
+            alertService.Information("Mbushi te gjitha fushat!");
+
+            return View(model);
         }
 
         // GET: PozitaController/Delete/5

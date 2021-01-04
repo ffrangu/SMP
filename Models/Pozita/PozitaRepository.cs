@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using SMP.Data;
 using System;
 using System.Collections.Generic;
@@ -24,5 +25,7 @@ namespace SMP.Models.Pozita
 
             return pozitat;
         }
+
+        
     }
 }
