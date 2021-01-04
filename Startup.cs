@@ -22,6 +22,7 @@ using SMP.Models;
 using SMP.Helpers;
 using SMP.Models.Bank;
 using SMP.Models.Grada;
+using SMP.Models.Pozita;
 
 namespace SMP
 {
@@ -113,6 +114,9 @@ namespace SMP
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IBankRepository, BankRepository>();
             services.AddScoped<IGradaRepository, GradaRepository>();
+            services.AddScoped<IPozitaRepository, PozitaRepository>();
+            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
