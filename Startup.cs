@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using SMP.Models;
 using SMP.Helpers;
 using SMP.Models.Bank;
+using SMP.Models.Grada;
 
 namespace SMP
 {
@@ -111,6 +112,7 @@ namespace SMP
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IBankRepository, BankRepository>();
+            services.AddScoped<IGradaRepository, GradaRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

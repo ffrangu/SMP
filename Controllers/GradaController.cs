@@ -4,100 +4,106 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SMP.Data;
-using SMP.ViewModels.Banka;
 using SMP.Helpers;
-using SMP.Models.Bank;
+using SMP.Models.Grada;
+using SMP.ViewModels.Grada;
 
 namespace SMP.Controllers
 {
-    public class BankaController : BaseController
+    public class GradaController : BaseController
     {
 
         protected UserManager<ApplicationUser> userManager;
         protected RoleManager<IdentityRole> roleManager;
         public AlertService alertService { get; }
 
-        private IBankRepository bankRepository;
+        private IGradaRepository gradaRepository;
+
         
 
-        public BankaController(IBankRepository _bankRepository,RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager,
+        public GradaController(IGradaRepository _gradaRepository, RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager,
             AlertService _alertService)
             : base(_roleManager, _userManager)
         {
             userManager = _userManager;
             roleManager = _roleManager;
             alertService = _alertService;
-            bankRepository = _bankRepository;
+            gradaRepository = _gradaRepository;
         }
-        // GET: BankaController
-        public async Task<ActionResult> IndexAsync()
-        {
-            var banks = await bankRepository.GetAll();
-            var listItems = new List<BankaListViewModel>();
 
-            foreach (var item in banks)
+
+        // GET: GradaController
+        public async  Task<ActionResult> IndexAsync()
+        {
+            var gradat = await gradaRepository.GetAll();
+            var listItems = new List<GradaListViewModel>();
+
+            foreach (var item in gradat)
             {
-                listItems.Add(new BankaListViewModel
+                listItems.Add(new GradaListViewModel
                 {
                     Id = item.Id,
-                    Kodi = item.Kodi,
-                    Emri  = item.Emri
+                    Emri = item.Emri,
+                    PagaMujore = item.PagaMujore,
+                    PagaVjetore = item.PagaVjetore
+
 
                 });
             }
+
             return View(listItems);
         }
 
-        // GET: BankaController/Details/5
+        // GET: GradaController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: BankaController/Create
+        // GET: GradaController/Create
         public async Task<ActionResult> CreateAsync()
         {
             ViewBag.AddError = false;
             return View();
         }
 
-        // POST: BankaController/Create
+        // POST: GradaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async  Task<ActionResult> CreateAsync(BankaCreateViewModel model)
+        public async Task<ActionResult> CreateAsync(GradaCreateViewModel model)
         {
-           if(ModelState.IsValid)
+            if(ModelState.IsValid)
             {
                 try
                 {
-                    var addBank = new Banka
+                    var addGrada = new Grada
                     {
                         Emri = model.Emri,
-                        Kodi = model.Kodi
+                        PagaMujore = model.PagaMujore,
+                        PagaVjetore = model.PagaVjetore
                     };
 
-                    var result = await bankRepository.AddAsync(addBank);
-                    alertService.Success("Banka u shtua me sukses!");
+                    var result = await gradaRepository.AddAsync(addGrada);
+                    alertService.Success("Grada u shtua me sukses!");
 
                     return RedirectToAction("Index");
-                    
                 }
-                catch
+                catch (Exception)
                 {
+
                     alertService.Danger("Diqka shkoi gabim, provoni perseri!");
                     return View(model);
                 }
-                
+
             }
             alertService.Information("Plotesoni te gjitha fushat!");
             return View(model);
+
         }
 
-        // GET: BankaController/Edit/5
+        // GET: GradaController/Edit/5
         public async Task<ActionResult> EditAsync(int? id)
         {
             ViewBag.AddError = false;
@@ -106,68 +112,68 @@ namespace SMP.Controllers
                 ViewBag.ErrorTitle = $"Id cannot be null";
                 return View("_NotFound");
             }
-            var bank = await bankRepository.Get(id);
+            var grada = await gradaRepository.Get(id);
 
-            if (bank==null)
+            if (grada == null)
             {
                 ViewBag.ErrorTitle = $"Banka me këtë { id } nuk është gjetur!";
                 return View("_NotFound");
             }
 
-            BankaEditViewModel model = new BankaEditViewModel
+            GradaEditViewModel model = new GradaEditViewModel
             {
-                Id = bank.Id,
-                Emri = bank.Emri,
-                Kodi = bank.Kodi
+                Id = grada.Id,
+                Emri = grada.Emri,
+                PagaMujore = grada.PagaMujore,
+                PagaVjetore = grada.PagaVjetore
             };
 
             return View(model);
         }
 
-        // POST: BankaController/Edit/5
+        // POST: GradaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async  Task<ActionResult> EditAsync(BankaEditViewModel model)
+        public async Task<ActionResult> EditAsync(GradaEditViewModel model)
         {
             if(ModelState.IsValid)
             {
                 try
                 {
-                    var editBank = await bankRepository.Get(model.Id);
+                    var editGrada = await gradaRepository.Get(model.Id);
+                    editGrada.Emri = model.Emri;
+                    editGrada.PagaMujore = model.PagaMujore;
+                    editGrada.PagaVjetore = model.PagaVjetore;
 
-                    
-                        editBank.Emri = model.Emri;
-                        editBank.Kodi = model.Kodi;
+                    var editedGrada = await gradaRepository.Update(editGrada);
 
 
-                        var editedBank = await bankRepository.Update(editBank);
-                        alertService.Success("Banka u editua me sukses!");
+                    alertService.Success("Grada u editua me sukses!");
 
-                    
+
 
                     return RedirectToAction(nameof(Index));
+
                 }
-                catch
+                catch (Exception)
                 {
+
                     alertService.Danger("Diqka shkoi keq!");
                     return View(model);
-                    
                 }
             }
-
             alertService.Information("Mbushi te gjitha fushat!");
-            
-            return View(model);
 
+            return View(model);
         }
 
-        // GET: BankaController/Delete/5
+        // GET: GradaController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: BankaController/Delete/5
+        // POST: GradaController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

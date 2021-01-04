@@ -33,6 +33,6 @@ namespace SMP.ViewModels.Banka
 
     public class BankaEditViewModel : BankaCreateViewModel
     {
-        public int Id { get; set; }
+        
     }
 }
