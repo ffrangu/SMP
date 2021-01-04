@@ -104,8 +104,8 @@ namespace SMP.Controllers
                        new MenuItems { Text= "Departamenti", Controller="", Action="", Icon = "menu-bullet menu-bullet-dot", Selected = false,
                        SubMenu = new List<MenuItems>
                        {
-                           new MenuItems { Text= "Regjistro departament", Controller="Departmenti", Action="Create", Icon = "menu-bullet menu-bullet-dot", Selected = false },
-                           new MenuItems { Text= "Lista e departamenteve", Controller="Departmenti", Action="Index", Icon = "menu-bullet menu-bullet-dot", Selected = false },
+                           new MenuItems { Text= "Regjistro departament", Controller="Departamenti", Action="Create", Icon = "menu-bullet menu-bullet-dot", Selected = false },
+                           new MenuItems { Text= "Lista e departamenteve", Controller="Departamenti", Action="Index", Icon = "menu-bullet menu-bullet-dot", Selected = false },
                        }},
                        new MenuItems { Text= "Pozita", Controller="", Action="", Icon = "menu-bullet menu-bullet-dot", Selected = false,
                        SubMenu = new List<MenuItems>

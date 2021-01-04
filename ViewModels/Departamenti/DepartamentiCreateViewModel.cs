@@ -12,6 +12,8 @@ namespace SMP.ViewModels.Departamenti
 
         public int KompaniaId { get; set; }
 
+        public string Kompania { get; set; }
+
         public string Emri { get; set; }
 
         public string Shkurtesa { get; set; }
