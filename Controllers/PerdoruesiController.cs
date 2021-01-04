@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SMP.Data;
 using SMP.Helpers;
+using SMP.Models.Kompania;
 using SMP.ViewModels;
 
 namespace SMP.Controllers
@@ -29,9 +30,10 @@ namespace SMP.Controllers
         public AlertService alertService { get; }
         private readonly IEmailSender emailSender;
         private readonly ILogger<PerdoruesiController> logger;
+        private IKompaniaRepository kompaniaRepository;
 
         public PerdoruesiController(RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager,
-            ILogger<PerdoruesiController> _logger, AlertService _alertService, IEmailSender _emailSender) 
+            ILogger<PerdoruesiController> _logger, AlertService _alertService, IEmailSender _emailSender, IKompaniaRepository _kompaniaRepository) 
             : base(_roleManager, _userManager)
         {
             userManager = _userManager;
@@ -39,7 +41,7 @@ namespace SMP.Controllers
             emailSender = _emailSender;
             alertService = _alertService;
             logger = _logger;
-
+            kompaniaRepository = _kompaniaRepository;
         }
 
         public async Task<ActionResult> IndexAsync()
@@ -62,6 +64,7 @@ namespace SMP.Controllers
         public async Task<ActionResult> CreateAsync()
         {
             ViewBag.RoleId = await LoadRoles(null, "User");
+            ViewBag.KompaniaId = await kompaniaRepository.KompaniaSelectList(null, false, false);
             ViewBag.AddError = false;
 
             return View();
@@ -78,6 +81,21 @@ namespace SMP.Controllers
             {
                 try
                 {
+                    var role = await roleManager.FindByIdAsync(model.RoleId);
+
+                    if(role.Name == "HR")
+                    {
+                        if(!model.KompaniaId.HasValue)
+                        {
+                            alertService.Information("Plotesoni te dhenat obligative");
+
+                            ViewBag.RoleId = await LoadRoles(null, "User");
+                            ViewBag.KompaniaId = await kompaniaRepository.KompaniaSelectList(null, false, false);
+
+                            return View(model);
+                        }
+                    }
+
                     var addUser = new ApplicationUser
                     {
                         FirstName = model.FirstName,
@@ -85,7 +103,8 @@ namespace SMP.Controllers
                         Email = model.Email,
                         UserName = model.Email,
                         Address = model.Address,
-                        PhoneNumber = model.PhoneNumber
+                        PhoneNumber = model.PhoneNumber,
+                        KompaniaId = model.KompaniaId
                     };
 
                     var result = await userManager.CreateAsync(addUser, model.Password);
@@ -95,7 +114,6 @@ namespace SMP.Controllers
                         adderrors = false;
                         logger.LogInformation("Administrator created new user.");
 
-                        var role = await roleManager.FindByIdAsync(model.RoleId);
 
                         result = await userManager.AddToRoleAsync(addUser, role.Name);
 
@@ -173,11 +191,15 @@ namespace SMP.Controllers
                 RoleId = role.Id,
                 Address = userFound.Address,
                 PhoneNumber = userFound.PhoneNumber,
-                UserProfile = userFound.Image
+                UserProfile = userFound.Image,
+                KompaniaId = userFound.KompaniaId,
+                RoleName = role.Name
             };
 
 
             ViewBag.RoleId = await LoadRoles(userRoles.FirstOrDefault(), "User");
+            ViewBag.KompaniaId = await kompaniaRepository.KompaniaSelectList(null, false, false);
+
             model.resetPassword.UserId = userFound.Id;
 
             //random hashed password
@@ -204,11 +226,29 @@ namespace SMP.Controllers
                         return View("_NotFound");
                     }
 
+                    var roleFound = await roleManager.FindByIdAsync(model.RoleId);
+
+                    if (roleFound.Name == "HR")
+                    {
+                        if (!model.KompaniaId.HasValue)
+                        {
+                            alertService.Information("Plotesoni te dhenat obligative");
+
+                            ViewBag.RoleId = await LoadRoles(null, "User");
+                            ViewBag.KompaniaId = await kompaniaRepository.KompaniaSelectList(null, false, false);
+
+                            return View(model);
+                        }
+                    }
+                    else
+                        model.KompaniaId = null;
+
                     userFound.FirstName = model.FirstName;
                     userFound.LastName = model.LastName;
                     userFound.Email = model.Email;
                     userFound.Address = model.Address;
                     userFound.PhoneNumber = model.PhoneNumber;
+                    userFound.KompaniaId = model.KompaniaId;
 
                     var userRoles = await userManager.GetRolesAsync(userFound);
                     var role = await roleManager.FindByNameAsync(userRoles.FirstOrDefault());

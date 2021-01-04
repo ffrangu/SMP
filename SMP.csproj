@@ -10,6 +10,8 @@
     <Compile Remove="Migrations\20201226162201_aspnetuserstable.Designer.cs" />
     <Compile Remove="Migrations\20201226162613_aspnettables.cs" />
     <Compile Remove="Migrations\20201226162613_aspnettables.Designer.cs" />
+    <Compile Remove="Migrations\20210104152520_DepartamentiKeyField.cs" />
+    <Compile Remove="Migrations\20210104152520_DepartamentiKeyField.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

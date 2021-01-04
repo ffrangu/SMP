@@ -36,6 +36,8 @@ namespace SMP.ViewModels
 
         [Required(ErrorMessage = "Plotësoni fushën")]
         public string Address { get; set; }
+
+        public int? KompaniaId { get; set; }
     }
 
     public class PerdoruesiEditViewModel : PerdoruesiCreateViewModel
@@ -59,6 +61,8 @@ namespace SMP.ViewModels
         public ResetPassword resetPassword { get; set; }
 
         public string UserProfile { get; set; }
+
+        public string RoleName { get; set; }
     }
 
     public class ResetPassword
