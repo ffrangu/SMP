@@ -20,6 +20,8 @@ namespace SMP.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         protected UserModel user;
 
+
+
         public BaseController(RoleManager<IdentityRole> _roleManager,/* ILogger<LoginModel> logger,*/ UserManager<ApplicationUser> _userManager)
         {
             userManager = _userManager;
@@ -217,6 +219,7 @@ namespace SMP.Controllers
             return new SelectList(roles, "Id", "Name");
         }
 
+        
         #endregion
 
         protected void AddErrors(IdentityResult result)
