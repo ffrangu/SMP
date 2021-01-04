@@ -23,6 +23,7 @@ using SMP.Helpers;
 using SMP.Models.Bank;
 using SMP.Models.Grada;
 using SMP.Models.Pozita;
+using SMP.Models.Kompania;
 
 namespace SMP
 {
@@ -115,6 +116,7 @@ namespace SMP
             services.AddScoped<IBankRepository, BankRepository>();
             services.AddScoped<IGradaRepository, GradaRepository>();
             services.AddScoped<IPozitaRepository, PozitaRepository>();
+            services.AddScoped<IKompaniaRepository, KompaniaRepository>();
             
 
         }
