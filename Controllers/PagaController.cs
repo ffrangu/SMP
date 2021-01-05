@@ -68,12 +68,12 @@ namespace SMP.Controllers
                                 }), "Value", "Text", DateTime.Today.Month.ToString());
 
 
-            ViewBag.Viti = new SelectList(Enumerable.Range(DateTime.Today.Year, 1).Select(x =>
+            ViewBag.Viti = new SelectList(Enumerable.Range(DateTime.Today.Year - 1, 2).Select(x =>
                            new SelectListItem()
                            {
                                Text = x.ToString(),
                                Value = x.ToString()
-                           }), "Value", "Text");
+                           }), "Value", "Text", DateTime.Today.Year.ToString());
 
             return View();
         }
