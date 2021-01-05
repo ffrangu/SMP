@@ -27,7 +27,9 @@ namespace SMP.Data
         public DateTime DataEkzekutimit { get; set; }
         public string CreatedBy { get; set; }
 
+        public int KompaniaId { get; set; }
         public virtual Grada Grada { get; set; }
         public virtual Punetori Punetori { get; set; }
+        public virtual Kompania Kompania { get; set; }
     }
 }
