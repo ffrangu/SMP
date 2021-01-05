@@ -17,8 +17,8 @@ namespace SMP.ViewModels.Paga
         [Required(ErrorMessage = "Plotësoni fushën")]
         public string Pershkrimi { get; set; }
         [Required(ErrorMessage = "Plotësoni fushën")]
-        public string Muaji { get; set; }
+        public int Muaji { get; set; }
         [Required(ErrorMessage = "Plotësoni fushën")]
-        public string Viti { get; set; }
+        public int Viti { get; set; }
     }
 }
