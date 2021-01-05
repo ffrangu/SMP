@@ -99,16 +99,26 @@
                         <div class="form-group row">
                             <label class="col-form-label col-3 text-lg-right text-left required">Datelindja</label>
                             <div class="col-9">
-                                @Html.TextBoxFor(m => m.NumriPersonal, new { @class = "form-control form-control-lg form-control-solid", @type = "number", @step = "any", @placeholder = "Datelindja" })
-                                @Html.ValidationMessageFor(m => m.NumriPersonal, "", new { @class = "text-danger" })
+                                @Html.TextBoxFor(m => m.Datelindja, new { @class = "form-control form-control-lg form-control-solid", @type = "date", @placeholder = "Datelindja" })
+                                @Html.ValidationMessageFor(m => m.Datelindja, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label class="col-form-label col-3 text-lg-right text-left required">Komuna</label>
                             <div class="col-9">
-                                @Html.DropDownListFor(m => m.KomunaId, ViewBag.KomunaId as SelectList, null, htmlAttributes: new { @class = "form-control form-control-lg form-control-solid" })
+                                @Html.DropDownListFor(m => m.KomunaId, ViewBag.KomunaId as SelectList, "Zgjedh", htmlAttributes: new { @class = "form-control form-control-lg form-control-solid" })
                                 @Html.ValidationMessageFor(m => m.KomunaId, "", new { @class = "text-danger" })
+                            </div>
+
+
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-form-label col-3 text-lg-right text-left required">Adresa</label>
+                            <div class="col-9">
+                                @Html.TextBoxFor(m => m.Adresa, new { @class = "form-control form-control-lg form-control-solid", @placeholder = "Adresa" })
+                                @Html.ValidationMessageFor(m => m.Adresa, "", new { @class = "text-danger" })
                             </div>
 
 
@@ -124,7 +134,7 @@
                         <div class="form-group row">
                             <label class="col-form-label col-3 text-lg-right text-left required">Kompania</label>
                             <div class="col-9">
-                                @Html.DropDownListFor(m => m.KompaniaId, ViewBag.Kompania as SelectList, null, htmlAttributes: new { @class = "form-control form-control-lg form-control-solid" })
+                                @Html.DropDownListFor(m => m.KompaniaId, ViewBag.Kompania as SelectList, "Zgjedh", htmlAttributes: new { @class = "form-control form-control-lg form-control-solid" })
                                 @Html.ValidationMessageFor(m => m.KompaniaId, "", new { @class = "text-danger" })
                             </div>
 
@@ -134,7 +144,7 @@
                         <div class="form-group row">
                             <label class="col-form-label col-3 text-lg-right text-left required">Departamenti</label>
                             <div class="col-9">
-                                @Html.DropDownListFor(m => m.DepartamentiId, ViewBag.Departamenti as SelectList, null, htmlAttributes: new { @class = "form-control form-control-lg form-control-solid" })
+                                @Html.DropDownListFor(m => m.DepartamentiId, ViewBag.Departamenti as SelectList, "Zgjedh", htmlAttributes: new { @class = "form-control form-control-lg form-control-solid" })
                                 @Html.ValidationMessageFor(m => m.DepartamentiId, "", new { @class = "text-danger" })
                             </div>
 
@@ -144,7 +154,7 @@
                         <div class="form-group row">
                             <label class="col-form-label col-3 text-lg-right text-left required">Pozita</label>
                             <div class="col-9">
-                                @Html.DropDownListFor(m => m.PozitaId, ViewBag.Pozita as SelectList, null, htmlAttributes: new { @class = "form-control form-control-lg form-control-solid" })
+                                @Html.DropDownListFor(m => m.PozitaId, ViewBag.Pozita as SelectList, "Zgjedh", htmlAttributes: new { @class = "form-control form-control-lg form-control-solid" })
                                 @Html.ValidationMessageFor(m => m.PozitaId, "", new { @class = "text-danger" })
                             </div>
 
@@ -161,7 +171,7 @@
                         <div class="form-group row">
                             <label class="col-form-label col-3 text-lg-right text-left required">Banka</label>
                             <div class="col-9">
-                                @Html.DropDownListFor(m => m.BankaId, ViewBag.Banka as SelectList, null, htmlAttributes: new { @class = "form-control form-control-lg form-control-solid" })
+                                @Html.DropDownListFor(m => m.BankaId, ViewBag.Banka as SelectList, "Zgjedh", htmlAttributes: new { @class = "form-control form-control-lg form-control-solid" })
                                 @Html.ValidationMessageFor(m => m.BankaId, "", new { @class = "text-danger" })
                             </div>
 
@@ -186,7 +196,7 @@
                         <div class="form-group row">
                             <label class="col-form-label col-3 text-lg-right text-left required">Grada</label>
                             <div class="col-9">
-                                @Html.DropDownListFor(m => m.GradaId, ViewBag.Grada as SelectList, null, htmlAttributes: new { @class = "form-control form-control-lg form-control-solid" })
+                                @Html.DropDownListFor(m => m.GradaId, ViewBag.Grada as SelectList, "Zgjedh", htmlAttributes: new { @class = "form-control form-control-lg form-control-solid" })
                                 @Html.ValidationMessageFor(m => m.GradaId, "", new { @class = "text-danger" })
                             </div>
                         </div>

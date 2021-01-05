@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SMP.Data;
 using SMP.Helpers;
 using SMP.Models.Bank;
@@ -8,6 +9,9 @@ using SMP.Models.Departamenti;
 using SMP.Models.Grada;
 using SMP.Models.Kompania;
 using SMP.Models.Pozita;
+using SMP.Models.Punetori;
+using SMP.ViewModels.Pozita;
+using SMP.ViewModels.Punetori;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,8 +36,12 @@ namespace SMP.Controllers
 
         private IGradaRepository gradaRepository;
 
-        public PunetoriController(IGradaRepository _gradaRepository,IPozitaRepository _pozitaRepository, IBankRepository _bankaRepository, IDepartamentiRepository _departamentiRepository, IKompaniaRepository _kompaniaRepository, RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager,
-            AlertService _alertService) 
+        private IPunetoriRepository punetoriRepository;
+
+        private readonly ILogger<PunetoriController> logger;
+
+        public PunetoriController(IPunetoriRepository _punetoriRepository,IGradaRepository _gradaRepository,IPozitaRepository _pozitaRepository, IBankRepository _bankaRepository, IDepartamentiRepository _departamentiRepository, IKompaniaRepository _kompaniaRepository, RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager,
+            AlertService _alertService, ILogger<PunetoriController> _logger) 
             : base(_roleManager,_userManager)
         {
             userManager = _userManager;
@@ -44,17 +52,47 @@ namespace SMP.Controllers
             kompaniaRepository = _kompaniaRepository;
             bankaRepository = _bankaRepository;
             gradaRepository= _gradaRepository;
-        }
+            punetoriRepository = _punetoriRepository;
+            logger = _logger;
+            
+    }
 
         // GET: PunetoriController
-        public ActionResult Index()
+        public async Task<ActionResult> IndexAsync()
         {
-            return View();
+            var punetoret = await punetoriRepository.GetPuntor();
+
+            var listItems = new List<PunetoriListViewModel>();
+
+            foreach (var item in punetoret)
+            {
+                listItems.Add(new PunetoriListViewModel
+                {
+                    Id = item.Id,
+                    Emri = item.Emri,
+                    Mbiemri = item.Mbiemri,
+                    NumriPersonal = item.NumriPersonal,
+                    Datelindja = item.Datelindja,
+                    Adresa = item.Adresa,
+                    Komuna= item.Komuna.Emri,
+                    Kompania = item.Kompania.Emri,
+                    Departamenti = item.Departamenti.Emri,
+                    Pozita = item.Pozita.Emri,
+                    Banka = item.Banka.Emri,
+                    Xhirollogaria = item.Xhirollogaria,
+                    Grada = item.Grada.Emri
+
+                });
+
+            }
+
+            return View(listItems);
         }
 
         // GET: PunetoriController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> DetailsAsync(int? id)
         {
+            var punetoriDetails = await punetoriRepository.GetPuntoriDetails()
             return View();
         }
 
@@ -74,16 +112,83 @@ namespace SMP.Controllers
         // POST: PunetoriController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> CreateAsync(PunetoriCreateViewModel model)
         {
-            try
+            bool showError = false;
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                
+                try
+                {
+                    var role = await roleManager.FindByNameAsync("User");
+                    var addPunetor = new Punetori
+                    {
+                        UserId = null,
+                        Emri = model.Emri,
+                        Mbiemri = model.Mbiemri,
+                        NumriPersonal = model.NumriPersonal,
+                        Datelindja = model.Datelindja,
+                        Adresa = model.Adresa,
+                        KomunaId = model.KomunaId,
+                        KompaniaId = model.KompaniaId,
+                        DepartamentiId = model.DepartamentiId,
+                        PozitaId = model.PozitaId,
+                        BankaId = model.BankaId,
+                        Xhirollogaria = model.Xhirollogaria,
+                        GradaId = model.GradaId,
+                        Created = DateTime.Now,
+                        CreatedBy = user.UserName
+
+                    };
+
+                    var result = await punetoriRepository.AddAsync(addPunetor);
+
+                    var addUser = new ApplicationUser
+                    {
+                        FirstName = model.Emri,
+                        LastName = model.Mbiemri,
+                        Email = model.Emri + "." + model.Mbiemri + "@gmail.com",
+                        UserName = model.NumriPersonal,
+                        Address = model.Adresa,
+                        PhoneNumber = "",
+                        KompaniaId = model.KompaniaId,
+                        EmailConfirmed = true,
+                        DepartamentiId = model.DepartamentiId
+                    };
+
+                    var resultUser = await userManager.CreateAsync(addUser, "12345678Aa#");
+
+                    if(resultUser.Succeeded)
+                    {
+                        logger.LogInformation("Administrator created new user.");
+
+
+                        resultUser = await userManager.AddToRoleAsync(addUser, role.Name);
+                    }
+
+                    var updatePunetoriUserID = await punetoriRepository.Get(addPunetor.Id);
+
+                    updatePunetoriUserID.UserId = addUser.Id;
+
+                    var updatedPunetori = await punetoriRepository.Update(updatePunetoriUserID);
+
+                    alertService.Success("Punetori u regjistrua me sukses!");
+
+                    return RedirectToAction(nameof(Index));
+
+
+                }
+                catch (Exception ex)
+                {
+                    alertService.Danger("Diqka shkoi keq!");
+                    return View(model);
+
+                }
             }
-            catch
-            {
-                return View();
-            }
+
+            alertService.Information("Mbushi te gjitha fushat!");
+
+            return View(model);
         }
 
         // GET: PunetoriController/Edit/5

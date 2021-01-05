@@ -26,6 +26,7 @@ using SMP.Models.Pozita;
 using SMP.Models.Kompania;
 using SMP.Models.Departamenti;
 using SMP.Models.Paga;
+using SMP.Models.Punetori;
 
 namespace SMP
 {
@@ -121,6 +122,7 @@ namespace SMP
             services.AddScoped<IKompaniaRepository, KompaniaRepository>();
             services.AddScoped<IDepartamentiRepository, DepartamentiRepository>();
             services.AddScoped<IPagaRepository, PagaRepository>();
+            services.AddScoped<IPunetoriRepository, PunetoriRepository>();
 
 
         }

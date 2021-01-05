@@ -149,8 +149,8 @@ namespace SMP.Controllers
                 Status = grada.Status
             };
 
-            ViewBag.Departamenti = await departamentiRepository.DepartamentiSelectList(grada.DepartamentiId, false, false);
-            ViewBag.Kompania = await kompaniaRepository.KompaniaSelectList(grada.KompaniaId, false, false);
+            ViewBag.Departamenti = await departamentiRepository.DepartamentiSelectList(null, false, false);
+            ViewBag.Kompania = await kompaniaRepository.KompaniaSelectList(null, false, false);
 
             return View(model);
             
