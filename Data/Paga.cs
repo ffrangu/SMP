@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SMP.Data
 {
@@ -9,6 +10,10 @@ namespace SMP.Data
         public int PunetoriId { get; set; }
         public int GradaId { get; set; }
         public int Viti { get; set; }
+
+        [Required]
+        public string Pershkrimi { get; set; }
+
         public int Muaji { get; set; }
         public decimal Bruto { get; set; }
         public decimal KontributiPunetori { get; set; }

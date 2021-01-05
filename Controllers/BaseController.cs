@@ -48,7 +48,8 @@ namespace SMP.Controllers
                     UserId = currentUser.Id,
                     UserName = currentUser.UserName,
                     RoleDescription = currentRole,
-                    //Picture = currentUser.Image
+                    Picture = currentUser.Image,
+                    KompaniaId = currentUser.KompaniaId
                 };
             }
             else

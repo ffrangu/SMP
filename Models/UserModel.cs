@@ -20,6 +20,7 @@ namespace SMP
         public bool PhoneNumberConfirmed { get; set; }
         public bool TwoFactorEnabled { get; set; }
 
+        public int? KompaniaId { get; set; }
         public string Picture { get; set; }
         //public LanguageEnum Language { get; set; }
     }

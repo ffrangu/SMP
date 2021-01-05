@@ -91,6 +91,33 @@ namespace SMP.Models.Kompania
 
         }
 
+        public async Task<SelectList> KompaniaSelectListBasedOnRole(string Role, int? KompaniaId)
+        {
+            var kompanite = await GetCompanies();
+            var filteredCompanies = new List<Data.Kompania>();
+            if(Role == "HR")
+            {
+                filteredCompanies = kompanite.Where(q => q.Id == KompaniaId.Value).ToList();
+            }
+            else
+            {
+                filteredCompanies = kompanite.Where(q=>!q.ParentId.HasValue).ToList();
+            }
+
+            var returnItems = new List<Data.Kompania>();
+            var listItems = new List<KompaniaListViewModel>();
+
+            foreach (var item in filteredCompanies)
+            {
+                returnItems.Add(new Data.Kompania { Id = item.Id, Emri = item.Emri.ToUpper() });
+
+                KompaniaSubTree(kompanite, item, returnItems, false, listItems);
+            }
+
+            return new SelectList(returnItems, "Id", "Emri");
+
+        }
+
         public async Task<List<KompaniaListViewModel>> KompaniaListModel()
         {
             var companies = await GetCompanies();

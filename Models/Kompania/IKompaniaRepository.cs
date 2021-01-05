@@ -12,6 +12,7 @@ namespace SMP.Models.Kompania
         Task<List<Data.Kompania>> GetCompanies();
 
         Task<SelectList> KompaniaSelectList(int? KompaniaId, bool isList, bool isEdit);
+        Task<SelectList> KompaniaSelectListBasedOnRole(string Role, int? KompaniaId);
 
         void KompaniaSubTree(IEnumerable<Data.Kompania> companies, Data.Kompania company, IList<Data.Kompania> items, bool isList, IList<KompaniaListViewModel> listItems);
 
