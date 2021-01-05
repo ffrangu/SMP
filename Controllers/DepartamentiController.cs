@@ -32,7 +32,6 @@ namespace SMP.Controllers
             roleManager = _roleManager;
             departamentiRepository = _departamentiRepository;
             kompaniaRepository = _kompaniaRepository;
-
         }
 
 
@@ -54,9 +53,7 @@ namespace SMP.Controllers
                     Shkurtesa = item.Shkurtesa,
                     Status = item.Status,
                     Created = item.Created,
-                    CreatedBy = item.CreatedBy
-                    
-
+                    CreatedBy = item.CreatedBy                  
                 });
 
             }
@@ -72,9 +69,8 @@ namespace SMP.Controllers
 
         // GET: DepartamentiController/Create
         public async Task<ActionResult> CreateAsync()
-        {
-            
-            ViewBag.Kompania = await kompaniaRepository.KompaniaSelectList(null, false, false);
+        {           
+            ViewBag.KompaniaId = await kompaniaRepository.KompaniaSelectList(null, false, false);
             return View();
         }
 
@@ -94,7 +90,7 @@ namespace SMP.Controllers
                         Shkurtesa = model.Shkurtesa,
                         Status = model.Status,
                         Created = DateTime.Now,
-                        CreatedBy = user.UserName
+                        CreatedBy = user.UserId
                     };
 
                     var result = await departamentiRepository.AddAsync(addDepartament);
@@ -122,27 +118,28 @@ namespace SMP.Controllers
                 ViewBag.ErrorTitle = $"Id cannot be null";
                 return View("_NotFound");
             }
-            var grada = await departamentiRepository.Get(id);
 
-            if (grada == null)
+            var dep = await departamentiRepository.Get(id);
+
+            if (dep == null)
             {
-                ViewBag.ErrorTitle = $"Pozita me këtë { id } nuk është gjetur!";
+                ViewBag.ErrorTitle = $"Departamenti me këtë { id } nuk është gjetur!";
                 return View("_NotFound");
             }
 
             DepartamentiEditViewModel model = new DepartamentiEditViewModel
             {
-                Id = grada.Id,
-                Emri = grada.Emri,
-                KompaniaId = grada.KompaniaId,
-                Created = grada.Created,
-                CreatedBy = grada.CreatedBy,
-                Status = grada.Status,
-                Shkurtesa = grada.Shkurtesa
+                Id = dep.Id,
+                Emri = dep.Emri,
+                KompaniaId = dep.KompaniaId,
+                Created = dep.Created,
+                CreatedBy = dep.CreatedBy,
+                Status = dep.Status,
+                Shkurtesa = dep.Shkurtesa
             };
 
             
-            ViewBag.Kompania = await kompaniaRepository.KompaniaSelectList(grada.KompaniaId, false, false);
+            ViewBag.KompaniaId = await kompaniaRepository.KompaniaSelectList(null, false, false);
 
             return View(model);
 
