@@ -11,6 +11,8 @@ namespace SMP.Models.Pozita
 
         Task<IEnumerable<Data.Pozita>> GetPozitat();
 
+        Task<SelectList> PozitaSelectList(int? PozitaId, bool isList, bool isEdit);
+
         
 
     }

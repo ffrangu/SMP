@@ -26,6 +26,13 @@ namespace SMP.Models.Pozita
             return pozitat;
         }
 
-        
+        public async Task<SelectList> PozitaSelectList(int? PozitaId, bool isList, bool isEdit)
+        {
+            var pozitat = await GetPozitat();
+
+            return new SelectList(pozitat, "Id", "Emri");
+        }
+
+
     }
 }
