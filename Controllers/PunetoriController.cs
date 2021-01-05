@@ -92,7 +92,8 @@ namespace SMP.Controllers
         // GET: PunetoriController/Details/5
         public async Task<ActionResult> DetailsAsync(int? id)
         {
-            var punetoriDetails = await punetoriRepository.GetPuntoriDetails()
+            var punetoriDetails = await punetoriRepository.GetPuntoriDetails(id);
+
             return View();
         }
 
