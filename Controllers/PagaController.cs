@@ -51,9 +51,32 @@ namespace SMP.Controllers
         }
 
         // GET: PagaController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> DetailsAsync(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                ViewBag.ErrorTitle = $"Id nuk mund të jetë null";
+                return View("_NotFound");
+            }
+
+            var paga = await pagaRepository.GetPaga(id.Value);
+
+            if(paga == null)
+            {
+                ViewBag.ErrorTitle = $"Paga nuk mund të gjendet";
+                return View("_NotFound");
+            }
+
+            if(User.IsInRole("HR"))
+            {
+                if(paga.KompaniaId != user.KompaniaId)
+                {
+                    alertService.Information("Nuk keni qasje në këtë pagë");
+                    return RedirectToAction("All", new { m = paga.Muaji, v = paga.Viti, k = paga.KompaniaId });
+                }   
+            }
+
+            return View(paga);
         }
 
         public async Task<ActionResult> All(int? m,int? v, int? k)

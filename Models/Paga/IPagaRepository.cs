@@ -1,4 +1,5 @@
-﻿using SMP.ViewModels.Paga;
+﻿using SMP.Data;
+using SMP.ViewModels.Paga;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,9 @@ namespace SMP.Models.Paga
         List<PagaViewModel> GetPagat(string role, int? KompaniaId);
 
         Task<List<AllPagat>> GetAllPagat(int m, int v, int k);
+
+        Task<Data.Paga> GetPaga(int Id);
+
+        Task<ApplicationUser> GetPunetoriUser(int PunetoriId);
     }
 }

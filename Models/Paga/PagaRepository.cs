@@ -1,4 +1,5 @@
 ﻿using EFCore.BulkExtensions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SMP.Data;
 using SMP.Models.Kompania;
@@ -13,9 +14,11 @@ namespace SMP.Models.Paga
 {
     public class PagaRepository : GenericRepository<Data.Paga>, IPagaRepository
     {
-        public PagaRepository(ApplicationDbContext context) : base(context)
-        {
+        private readonly UserManager<ApplicationUser> userManager;
 
+        public PagaRepository(UserManager<ApplicationUser> _userManager, ApplicationDbContext context) : base(context)
+        {
+            userManager = _userManager;
         }
 
 
@@ -194,6 +197,26 @@ namespace SMP.Models.Paga
                         }).ToList();
 
             return allPagat;
+        }
+
+        public async Task<Data.Paga> GetPaga(int Id)
+        {
+            var paga = await context.Paga.Where(q => q.Id == Id).Include(q => q.Punetori)
+                                                              .Include(q => q.Kompania)
+                                                              .Include(q => q.Punetori.Pozita)
+                                                              .Include(q => q.Grada).FirstOrDefaultAsync();
+
+            return paga;
+                                                              
+        }
+
+        public async Task<ApplicationUser> GetPunetoriUser(int PunetoriId)
+        {
+            var punetori = await context.Punetori.FindAsync(PunetoriId);
+
+            var user = await userManager.FindByIdAsync(punetori.UserId);
+
+            return user;
         }
     }
 }

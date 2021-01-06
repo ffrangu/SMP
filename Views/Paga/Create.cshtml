@@ -8,9 +8,9 @@
     <div class="card-header">
         <h3 class="card-title">Gjenerimi i pagave për punëtorët</h3>
     </div>
-    <!--begin::Form-->
-    <form class="form" method="post">
-        <div class="card-body">
+    <div class="card-body">
+        <!--begin::Form-->
+        <form class="form" method="post">
             <div class="form-group row">
                 <div class="col-md-12">
                     <label>Zgjedh kompanine per ekzekutim:</label>
@@ -23,18 +23,14 @@
             <div class="form-group row">
                 <div class="col-lg-6">
                     <label>Viti:</label>
-                    <div class="input-group">
-                        <select asp-for="Viti" asp-items="ViewBag.Viti" class="form-control init-select2">
-                        </select>
-                    </div>
+                    <select asp-for="Viti" asp-items="ViewBag.Viti" class="form-control init-select2">
+                    </select>
                     <span class="form-text text-muted">Viti për ekzekutim</span>
                 </div>
                 <div class="col-lg-6">
                     <label>Muaji:</label>
-                    <div class="input-group">
-                        <select asp-for="Muaji" asp-items="ViewBag.Muaji" class="form-control init-select2">
-                        </select>
-                    </div>
+                    <select asp-for="Muaji" asp-items="ViewBag.Muaji" class="form-control init-select2">
+                    </select>
                     <span class="form-text text-muted">Zgjedhni muajin per ekzekutim</span>
                 </div>
             </div>
@@ -47,17 +43,19 @@
 
                 </div>
             </div>
-        </div>
-        <div class="card-footer">
-            <div class="row">
-                <div class="col-lg-6">
-                    <button type="submit" class="btn btn-primary mr-2">Ekzekuto</button>
-                    <button type="reset" class="btn btn-secondary">Anulo</button>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <button type="submit" class="btn btn-primary mr-2">Ekzekuto</button>
+                        <button type="reset" class="btn btn-secondary">Anulo</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </form>
-    <!--end::Form-->
+        </form>
+        <!--end::Form-->
+
+    </div>
+
 </div>
 
 @section Scripts {
