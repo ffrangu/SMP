@@ -8,6 +8,7 @@ using SMP.Models.Bank;
 using SMP.Models.Departamenti;
 using SMP.Models.Grada;
 using SMP.Models.Kompania;
+using SMP.Models.Paga;
 using SMP.Models.Pozita;
 using SMP.Models.Punetori;
 using SMP.ViewModels.Pozita;
@@ -38,9 +39,10 @@ namespace SMP.Controllers
 
         private IPunetoriRepository punetoriRepository;
 
+        private IPagaRepository pagaRepository;
         private readonly ILogger<PunetoriController> logger;
 
-        public PunetoriController(IPunetoriRepository _punetoriRepository,IGradaRepository _gradaRepository,IPozitaRepository _pozitaRepository, IBankRepository _bankaRepository, IDepartamentiRepository _departamentiRepository, IKompaniaRepository _kompaniaRepository, RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager,
+        public PunetoriController(IPagaRepository _pagaRepository,IPunetoriRepository _punetoriRepository,IGradaRepository _gradaRepository,IPozitaRepository _pozitaRepository, IBankRepository _bankaRepository, IDepartamentiRepository _departamentiRepository, IKompaniaRepository _kompaniaRepository, RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager,
             AlertService _alertService, ILogger<PunetoriController> _logger) 
             : base(_roleManager,_userManager)
         {
@@ -54,6 +56,7 @@ namespace SMP.Controllers
             gradaRepository= _gradaRepository;
             punetoriRepository = _punetoriRepository;
             logger = _logger;
+            pagaRepository = _pagaRepository;
             
     }
 
@@ -107,6 +110,23 @@ namespace SMP.Controllers
             model.Banka = punetoriDetails.Banka.Emri;
             model.Xhirollogaria = punetoriDetails.Xhirollogaria;
             model.Grada = punetoriDetails.Grada.Emri;
+
+            var pagat = await pagaRepository.GetAll();
+            var pagatDetails = pagat.Where(x => x.PunetoriId == id).OrderByDescending(x=>x.Muaji).Take(6);
+
+            foreach (var item in pagatDetails)
+            {
+                model.PagaList.Add(new PagaList
+                {
+                    Id = item.Id,
+                    Viti = item.Viti,
+                    Muaji = item.Muaji,
+                    PagaFinale = item.PagaFinale,
+                    Pershkrimi = item.Pershkrimi
+
+                });
+
+            }
 
 
             return View(model);

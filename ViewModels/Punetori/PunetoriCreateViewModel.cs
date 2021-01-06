@@ -58,6 +58,11 @@ namespace SMP.ViewModels.Punetori
 
     public class PunetoriListViewModel
     {
+
+        public PunetoriListViewModel()
+        {
+            PagaList = new List<PagaList>();
+        }
         public int Id { get; set; }
         public string Emri { get; set; }
 
@@ -94,6 +99,22 @@ namespace SMP.ViewModels.Punetori
         public int GradaId { get; set; }
 
         public string Grada { get; set; }
+
+        public List<PagaList> PagaList { get; set; }
+
+    }
+
+    public class PagaList
+    {
+        public int Id { get; set; }
+
+        public int Viti { get; set; }
+
+        public int Muaji { get; set; }
+
+        public decimal PagaFinale { get; set; }
+
+        public string Pershkrimi { get; set; }
 
     }
 }
