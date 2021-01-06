@@ -40,12 +40,12 @@ namespace SMP.Controllers
         }
 
         // GET: PagaController
-        public async Task<ActionResult> IndexAsync()
+        public ActionResult Index()
         {
             string role = User.IsInRole("HR") ? "HR" : "Administrator";
             int? KompaniaId = User.IsInRole("HR") ? user.KompaniaId : (int?)null;
 
-            var pagat = await pagaRepository.GetPagat(role, KompaniaId);
+            var pagat = pagaRepository.GetPagat(role, KompaniaId);
 
             return View(pagat);
         }
@@ -54,6 +54,24 @@ namespace SMP.Controllers
         public ActionResult Details(int id)
         {
             return View();
+        }
+
+        public async Task<ActionResult> All(int? m,int? v, int? k)
+        {
+            if(m == null || v == null || k == null)
+            {
+                ViewBag.ErrorTitle = $"Parametrat nuk mund të jenë null";
+                return View("_NotFound");
+            }
+
+            if(User.IsInRole("HR"))
+            {
+                k = user.KompaniaId;
+            }
+
+            var allPagat = await pagaRepository.GetAllPagat(m.Value, v.Value, k.Value);
+
+            return View(allPagat);
         }
 
         [Authorize(Roles = "Administrator, HR")]
@@ -206,7 +224,7 @@ namespace SMP.Controllers
         {
             try
             {
-                return RedirectToAction(nameof(IndexAsync));
+                return RedirectToAction(nameof(Index));
             }
             catch
             {
@@ -227,7 +245,7 @@ namespace SMP.Controllers
         {
             try
             {
-                return RedirectToAction(nameof(IndexAsync));
+                return RedirectToAction(nameof(Index));
             }
             catch
             {

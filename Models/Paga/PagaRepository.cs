@@ -5,6 +5,7 @@ using SMP.Models.Kompania;
 using SMP.ViewModels.Paga;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,7 +32,7 @@ namespace SMP.Models.Paga
         {
             if(role == "HR")
             {
-                return await context.Paga.AnyAsync(q => q.Punetori.KompaniaId == KompaniaId && q.Viti == Viti && q.Muaji == Muaji);
+                return await context.Paga.Include(q=>q.Punetori.Kompania).AnyAsync(q => q.Punetori.KompaniaId == KompaniaId && q.Viti == Viti && q.Muaji == Muaji);
 
             }
             else
@@ -125,39 +126,74 @@ namespace SMP.Models.Paga
             return tatimi;
         }
 
-        public async Task<List<PagaViewModel>> GetPagat(string role, int? KompaniaId)
+        public List<PagaViewModel> GetPagat(string role, int? KompaniaId)
         {
             var pagat = new List<PagaViewModel>();
 
             if (role == "Administrator")
             {
-                var pagatGrouped = await context.Paga.Include(q => q.Kompania).GroupBy(q => new { q.Viti, q.Muaji, q.KompaniaId }).ToListAsync();
+                var pagatGrouped = context.Paga.Include(q => q.Kompania).OrderByDescending(q => q.Id).ToList().GroupBy(q => new { q.Viti, q.Muaji, q.KompaniaId });
                 pagat = (from p in pagatGrouped
                          select new PagaViewModel
                          {
-                             Muaji = p.FirstOrDefault().Muaji,
+                             Muaji = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(p.FirstOrDefault().Muaji),
+                             Month = p.FirstOrDefault().Muaji,
                              Viti = p.FirstOrDefault().Viti,
                              Kompania = p.FirstOrDefault().Kompania.Emri,
                              Data = p.FirstOrDefault().DataEkzekutimit.Day + "/" + p.FirstOrDefault().DataEkzekutimit.Month + "/" + p.FirstOrDefault().DataEkzekutimit.Year,
-                             Pershkrimi = p.FirstOrDefault().Pershkrimi
+                             Pershkrimi = p.FirstOrDefault().Pershkrimi,
+                             KompaniaId = p.FirstOrDefault().KompaniaId
                          }).ToList();
             }
             else
             {
-                var pagatGrouped = await context.Paga.Where(q => q.KompaniaId == KompaniaId).Include(q => q.Kompania).GroupBy(q => new { q.Viti, q.Muaji, q.KompaniaId }).ToListAsync();
+                var pagatGrouped = context.Paga.Where(q => q.KompaniaId == KompaniaId).Include(q => q.Kompania).OrderByDescending(q => q.Id).ToList().GroupBy(q => new { q.Viti, q.Muaji, q.KompaniaId });
 
                 pagat = (from p in pagatGrouped
                          select new PagaViewModel
                          {
-                             Muaji = p.FirstOrDefault().Muaji,
+                             Muaji = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(p.FirstOrDefault().Muaji),
+                             Month = p.FirstOrDefault().Muaji,
                              Viti = p.FirstOrDefault().Viti,
                              Kompania = p.FirstOrDefault().Kompania.Emri,
                              Data = p.FirstOrDefault().DataEkzekutimit.Day + "/" + p.FirstOrDefault().DataEkzekutimit.Month + "/" + p.FirstOrDefault().DataEkzekutimit.Year,
-                             Pershkrimi = p.FirstOrDefault().Pershkrimi
+                             Pershkrimi = p.FirstOrDefault().Pershkrimi,
+                             KompaniaId = p.FirstOrDefault().KompaniaId
                          }).ToList();
             }
 
             return pagat;
+        }
+
+        public async Task<List<AllPagat>> GetAllPagat(int m, int v, int k)
+        {
+            var allPagat = new List<AllPagat>();
+
+            var pagat = await context.Paga.Where(q => q.Viti == v && q.Muaji == m && q.KompaniaId == k)
+                              .Include(q => q.Punetori)
+                              .Include(q => q.Punetori.Pozita)
+                              .Include(q => q.Grada)
+                              .Include(q => q.Kompania).OrderByDescending(q=>q.Id).ToListAsync();
+
+            allPagat = (from p in pagat
+                        select new AllPagat { 
+                            Id = p.Id,
+                            Punetori = p.Punetori.Emri + " " + p.Punetori.Mbiemri,
+                            Kompania = p.Kompania.Emri,
+                            Pozita = p.Punetori.Pozita.Emri,
+                            Grada = p.Grada.Emri,
+                            Viti = p.Viti,
+                            Muaji = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(p.Muaji),
+                            Bruto = p.Bruto,
+                            Kontributi = p.KontributiPunetori,
+                            PagaPaTatimuar = p.PagaTatim,
+                            Tatimi = p.Tatimi,
+                            PagaNeto = p.PagaNeto,
+                            Bonuse = p.Bonuse,
+                            PagaFinale = p.PagaFinale
+                        }).ToList();
+
+            return allPagat;
         }
     }
 }
