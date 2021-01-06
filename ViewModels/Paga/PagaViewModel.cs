@@ -10,13 +10,48 @@ namespace SMP.ViewModels.Paga
     {
         public int Viti { get; set; }
 
-        public int Muaji { get; set; }
+        public string Muaji { get; set; }
+
+        public int Month { get; set; }
 
         public string Data { get; set; }
 
         public string Kompania { get; set; }
 
         public string Pershkrimi { get; set; }
+
+        public int KompaniaId { get; set; }
+    }
+
+    public class AllPagat
+    {
+        public int Id { get; set; }
+
+        public string Punetori { get; set; }
+
+        public string Kompania { get; set; }
+
+        public string Pozita { get; set; }
+
+        public string Grada { get; set; }
+
+        public int Viti { get; set; }
+
+        public string Muaji { get; set; }
+
+        public decimal Bruto { get; set; }
+
+        public decimal Kontributi { get; set; }
+
+        public decimal PagaPaTatimuar { get; set; }
+
+        public decimal Tatimi { get; set; }
+
+        public decimal PagaNeto { get; set; }
+
+        public decimal? Bonuse { get; set; }
+
+        public decimal PagaFinale { get; set; }
     }
 
     public class PagaCreateViewModel

@@ -18,6 +18,8 @@ namespace SMP.Models.Paga
 
         Task<decimal> Tatimi(decimal paganeto, bool primare);
 
-        Task<List<PagaViewModel>> GetPagat(string role, int? KompaniaId);
+        List<PagaViewModel> GetPagat(string role, int? KompaniaId);
+
+        Task<List<AllPagat>> GetAllPagat(int m, int v, int k);
     }
 }
