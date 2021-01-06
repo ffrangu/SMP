@@ -94,7 +94,22 @@ namespace SMP.Controllers
         {
             var punetoriDetails = await punetoriRepository.GetPuntoriDetails(id);
 
-            return View();
+            var model = new PunetoriListViewModel();
+            model.Emri = punetoriDetails.Emri;
+            model.Mbiemri = punetoriDetails.Mbiemri;
+            model.NumriPersonal = punetoriDetails.NumriPersonal;
+            model.Datelindja = punetoriDetails.Datelindja;
+            model.Adresa = punetoriDetails.Adresa;
+            model.Komuna = punetoriDetails.Komuna.Emri;
+            model.Kompania = punetoriDetails.Kompania.Emri;
+            model.Departamenti = punetoriDetails.Departamenti.Emri;
+            model.Pozita = punetoriDetails.Pozita.Emri;
+            model.Banka = punetoriDetails.Banka.Emri;
+            model.Xhirollogaria = punetoriDetails.Xhirollogaria;
+            model.Grada = punetoriDetails.Grada.Emri;
+
+
+            return View(model);
         }
 
         // GET: PunetoriController/Create
