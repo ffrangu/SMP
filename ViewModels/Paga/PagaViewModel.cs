@@ -8,6 +8,15 @@ namespace SMP.ViewModels.Paga
 {
     public class PagaViewModel
     {
+        public int Viti { get; set; }
+
+        public int Muaji { get; set; }
+
+        public string Data { get; set; }
+
+        public string Kompania { get; set; }
+
+        public string Pershkrimi { get; set; }
     }
 
     public class PagaCreateViewModel

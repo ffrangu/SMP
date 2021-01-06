@@ -40,9 +40,14 @@ namespace SMP.Controllers
         }
 
         // GET: PagaController
-        public ActionResult Index()
+        public async Task<ActionResult> IndexAsync()
         {
-            return View();
+            string role = User.IsInRole("HR") ? "HR" : "Administrator";
+            int? KompaniaId = User.IsInRole("HR") ? user.KompaniaId : (int?)null;
+
+            var pagat = await pagaRepository.GetPagat(role, KompaniaId);
+
+            return View(pagat);
         }
 
         // GET: PagaController/Details/5
@@ -201,7 +206,7 @@ namespace SMP.Controllers
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(IndexAsync));
             }
             catch
             {
@@ -222,7 +227,7 @@ namespace SMP.Controllers
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(IndexAsync));
             }
             catch
             {

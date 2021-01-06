@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SMP.ViewModels.Paga;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,5 +17,7 @@ namespace SMP.Models.Paga
         Task<IList<Data.Punetori>> GetPunetoret(int KompaniaId);
 
         Task<decimal> Tatimi(decimal paganeto, bool primare);
+
+        Task<List<PagaViewModel>> GetPagat(string role, int? KompaniaId);
     }
 }

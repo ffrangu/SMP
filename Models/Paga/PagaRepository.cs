@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SMP.Data;
 using SMP.Models.Kompania;
+using SMP.ViewModels.Paga;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -122,6 +123,41 @@ namespace SMP.Models.Paga
             tatimi = perqindja1 + perqindja2 + perqindja3 + perqindja4;
 
             return tatimi;
+        }
+
+        public async Task<List<PagaViewModel>> GetPagat(string role, int? KompaniaId)
+        {
+            var pagat = new List<PagaViewModel>();
+
+            if (role == "Administrator")
+            {
+                var pagatGrouped = await context.Paga.Include(q => q.Kompania).GroupBy(q => new { q.Viti, q.Muaji, q.KompaniaId }).ToListAsync();
+                pagat = (from p in pagatGrouped
+                         select new PagaViewModel
+                         {
+                             Muaji = p.FirstOrDefault().Muaji,
+                             Viti = p.FirstOrDefault().Viti,
+                             Kompania = p.FirstOrDefault().Kompania.Emri,
+                             Data = p.FirstOrDefault().DataEkzekutimit.Day + "/" + p.FirstOrDefault().DataEkzekutimit.Month + "/" + p.FirstOrDefault().DataEkzekutimit.Year,
+                             Pershkrimi = p.FirstOrDefault().Pershkrimi
+                         }).ToList();
+            }
+            else
+            {
+                var pagatGrouped = await context.Paga.Where(q => q.KompaniaId == KompaniaId).Include(q => q.Kompania).GroupBy(q => new { q.Viti, q.Muaji, q.KompaniaId }).ToListAsync();
+
+                pagat = (from p in pagatGrouped
+                         select new PagaViewModel
+                         {
+                             Muaji = p.FirstOrDefault().Muaji,
+                             Viti = p.FirstOrDefault().Viti,
+                             Kompania = p.FirstOrDefault().Kompania.Emri,
+                             Data = p.FirstOrDefault().DataEkzekutimit.Day + "/" + p.FirstOrDefault().DataEkzekutimit.Month + "/" + p.FirstOrDefault().DataEkzekutimit.Year,
+                             Pershkrimi = p.FirstOrDefault().Pershkrimi
+                         }).ToList();
+            }
+
+            return pagat;
         }
     }
 }
