@@ -14,6 +14,8 @@
     <Compile Remove="Migrations\20210104152520_DepartamentiKeyField.Designer.cs" />
     <Compile Remove="Migrations\20210105184438_PagaPershkrimiField.cs" />
     <Compile Remove="Migrations\20210105184438_PagaPershkrimiField.Designer.cs" />
+    <Compile Remove="Migrations\20210107092146_kontratapunetoriidentity.cs" />
+    <Compile Remove="Migrations\20210107092146_kontratapunetoriidentity.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

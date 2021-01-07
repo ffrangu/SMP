@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SMP.Data;
 
-namespace SMP.Data.Migrations
+namespace SMP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210107091151_PunetoriKontrataDroppd")]
+    partial class PunetoriKontrataDroppd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -655,23 +657,16 @@ namespace SMP.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Emri")
-                        .IsRequired()
-                        .HasColumnType("nchar(10)")
-                        .IsFixedLength(true)
-                        .HasMaxLength(10);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PunetoriId")
                         .HasColumnType("int");
@@ -683,7 +678,7 @@ namespace SMP.Data.Migrations
 
                     b.HasIndex("PunetoriId");
 
-                    b.ToTable("PUNETORI_KONTRATA");
+                    b.ToTable("PunetoriKontrata");
                 });
 
             modelBuilder.Entity("SMP.Data.Tatimi", b =>
@@ -888,7 +883,7 @@ namespace SMP.Data.Migrations
                     b.HasOne("SMP.Data.Punetori", "Punetori")
                         .WithMany("PunetoriKontrata")
                         .HasForeignKey("PunetoriId")
-                        .HasConstraintName("FK_PUNETORI_KONTRATA_PUNETORI")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

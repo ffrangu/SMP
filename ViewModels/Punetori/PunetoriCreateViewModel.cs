@@ -24,6 +24,9 @@ namespace SMP.ViewModels.Punetori
         [Required(ErrorMessage = "Ju lutem plotësoni fushen!")]
         public DateTime Datelindja { get; set; }
 
+        [Required(ErrorMessage = "Ju lutem plotësoni fushen!")]
+        [EmailAddress]
+        public string Email { get; set; }
 
         public string Adresa { get; set; }
 
@@ -48,6 +51,7 @@ namespace SMP.ViewModels.Punetori
         [Required(ErrorMessage = "Ju lutem plotësoni fushen!")]
         public int GradaId { get; set; }
 
+        public string Telefoni { get; set; }
         
         public DateTime Created { get; set; }
 
@@ -100,6 +104,8 @@ namespace SMP.ViewModels.Punetori
         public int GradaId { get; set; }
 
         public string Grada { get; set; }
+
+        public string Email { get; set; }
 
         public List<PagaList> PagaList { get; set; }
 
