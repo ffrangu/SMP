@@ -83,8 +83,7 @@ namespace SMP.Controllers
             {
                 menus = new List<MenuItems>
                 {
-
-                #region Roli Administrator
+                   #region Roli Administrator
 
                    role.In("Administrator") ? new MenuItems{ Text ="Dashboard", Controller="Home", Action="Index", Selected = false, Icon = "menu-icon flaticon-home"  } : null,
                    role.In("Administrator") ? new MenuItems{ Text = "Përdoruesi", Controller="", Action="", Selected = false, Icon = "menu-icon flaticon-user",
@@ -162,8 +161,47 @@ namespace SMP.Controllers
                    {
                        new MenuItems { Text= "Shfleto raportet", Controller="Raport", Action="Index", Icon = "menu-bullet menu-bullet-dot", Selected = false },
                    }} : null,
-                    
-                #endregion
+
+                    #endregion
+
+                   #region Roli HR
+                   role.In("HR") ? new MenuItems{ Text ="Dashboard", Controller="Home", Action="Index", Selected = false, Icon = "menu-icon flaticon-home"  } : null,
+                   role.In("HR") ? new MenuItems{ Text = "Bonuset", Controller="", Action="", Selected = false, Icon = "menu-icon fa fa-tree",
+                   SubMenu = new List<MenuItems>
+                   {
+                       new MenuItems { Text= "Bonuset", Controller="Bonus", Action="Index", Icon = "menu-bullet menu-bullet-dot", Selected = false },
+                       new MenuItems { Text= "Regjistro bonus", Controller="Bonus", Action="Create", Icon = "menu-bullet menu-bullet-dot", Selected = false },
+                   }} : null,
+
+                   role.In("HR") ? new MenuItems{ Text = "Punëtori", Controller="", Action="", Selected = false, Icon = "menu-icon fa fa-tree",
+                   SubMenu = new List<MenuItems>
+                   {
+                       new MenuItems { Text= "Lista e punëtorëve", Controller="Punetori", Action="Index", Icon = "menu-bullet menu-bullet-dot", Selected = false },
+                       new MenuItems { Text= "Kërko punëtor", Controller="Punetori", Action="Search", Icon = "menu-bullet menu-bullet-dot", Selected = false },
+                       new MenuItems { Text= "Regjistro punëtor", Controller="Punetori", Action="Create", Icon = "menu-bullet menu-bullet-dot", Selected = false },
+                   }} : null,
+
+                   role.In("HR") ? new MenuItems{ Text = "Pagat", Controller="", Action="", Selected = false, Icon = "menu-icon flaticon2-check-mark",
+                   SubMenu = new List<MenuItems>
+                   {
+                       new MenuItems { Text= "Lista e pagave", Controller="Paga", Action="Index", Icon = "menu-bullet menu-bullet-dot", Selected = false },
+                       new MenuItems { Text= "Gjenero pagat", Controller="Paga", Action="Create", Icon = "menu-bullet menu-bullet-dot", Selected = false },
+                   }} : null,
+                   role.In("HR") ? new MenuItems{ Text = "Raportet", Controller="", Action="", Selected = false, Icon = "menu-icon flaticon2-contract",
+                   SubMenu = new List<MenuItems>
+                   {
+                       new MenuItems { Text= "Shfleto raportet", Controller="Raport", Action="Index", Icon = "menu-bullet menu-bullet-dot", Selected = false },
+                   }} : null,
+                    #endregion
+
+                    #region Roli User
+                   role.In("User") ? new MenuItems{ Text ="Dashboard", Controller="Home", Action="Index", Selected = false, Icon = "menu-icon flaticon-home"  } : null,
+                   role.In("User") ? new MenuItems{ Text = "Raportet", Controller="", Action="", Selected = false, Icon = "menu-icon flaticon2-contract",
+                   SubMenu = new List<MenuItems>
+                   {
+                       new MenuItems { Text= "Shfleto raportet", Controller="Raport", Action="Index", Icon = "menu-bullet menu-bullet-dot", Selected = false },
+                   }} : null,
+                    #endregion
 
                 };
             }

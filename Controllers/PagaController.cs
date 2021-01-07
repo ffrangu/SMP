@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace SMP.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Administrator, HR")]
     public class PagaController : BaseController
     {
         protected UserManager<ApplicationUser> userManager;
