@@ -257,4 +257,87 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+    $(function () {
+
+        $('#KompaniaId').change(function () {
+            fnKompaniaChange();
+
+        });
+        $('#DepartamentiId').change(function () {
+            fnDepartamentiChange();
+
+        });
+
+        
+        
+
+    });
+
+
+    function fnKompaniaChange() {
+        var KompaniaId = $('#KompaniaId').val();
+
+        if (KompaniaId > 0) {
+                $.ajax({
+                    data: { KompaniaId: KompaniaId },
+                    url: '@Url.Action("GetDepartments", "Departamenti")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (results) {
+
+                        $("#DepartamentiId").html("");
+                        $("#DepartamentiId").prepend(new Option("Zgjedh", ""));
+                        $.each(results, function (i, result) {
+                            $("#DepartamentiId").append(
+                       $('<option></option>').val(result.value).html(result.text)
+                       );
+                        });
+                        $("#DepartamentiId").trigger("change");
+                    }
+                });
+            }
+            else {
+                $("#DepartamentiId").html("");
+                $("#DepartamentiId").prepend(new Option("Zgjedh", ""));
+                $("#DepartamentiId").trigger("change");
+            }
+
+        }
+
+        function fnDepartamentiChange() {
+            var DepartamentiId = $('#DepartamentiId').val();
+            var KompaniaId = $('#KompaniaId').val();
+
+
+            if (DepartamentiId > 0) {
+                $.ajax({
+                    data: { DepartamentiId: DepartamentiId,KompaniaId:KompaniaId },
+                    url: '@Url.Action("GetPozita", "Pozita")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (results) {
+
+                        $("#PozitaId").html("");
+                        $("#PozitaId").prepend(new Option("Zgjedh", ""));
+                        $.each(results, function (i, result) {
+                            $("#PozitaId").append(
+                       $('<option></option>').val(result.value).html(result.text)
+                       );
+                        });
+                        $("#PozitaId").trigger("change");
+                    }
+                });
+            }
+            else {
+                $("#PozitaId").html("");
+                $("#PozitaId").prepend(new Option("Zgjedh", ""));
+                $("#PozitaId").trigger("change");
+            }
+
+            }
+
+    </script>
 }
