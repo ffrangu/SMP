@@ -11,10 +11,12 @@ using SMP.Models.Kompania;
 using SMP.Models.Paga;
 using SMP.Models.Pozita;
 using SMP.Models.Punetori;
+using SMP.Models.PunetoriKontrata;
 using SMP.ViewModels.Pozita;
 using SMP.ViewModels.Punetori;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -39,10 +41,12 @@ namespace SMP.Controllers
 
         private IPunetoriRepository punetoriRepository;
 
+        private IPunetoriKontrataRepository kontrataRepository;
+
         private IPagaRepository pagaRepository;
         private readonly ILogger<PunetoriController> logger;
 
-        public PunetoriController(IPagaRepository _pagaRepository,IPunetoriRepository _punetoriRepository,IGradaRepository _gradaRepository,IPozitaRepository _pozitaRepository, IBankRepository _bankaRepository, IDepartamentiRepository _departamentiRepository, IKompaniaRepository _kompaniaRepository, RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager,
+        public PunetoriController(IPunetoriKontrataRepository _kontrataRepository,IPagaRepository _pagaRepository,IPunetoriRepository _punetoriRepository,IGradaRepository _gradaRepository,IPozitaRepository _pozitaRepository, IBankRepository _bankaRepository, IDepartamentiRepository _departamentiRepository, IKompaniaRepository _kompaniaRepository, RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager,
             AlertService _alertService, ILogger<PunetoriController> _logger) 
             : base(_roleManager,_userManager)
         {
@@ -57,6 +61,7 @@ namespace SMP.Controllers
             punetoriRepository = _punetoriRepository;
             logger = _logger;
             pagaRepository = _pagaRepository;
+            kontrataRepository = _kontrataRepository;
             
     }
 
@@ -113,6 +118,8 @@ namespace SMP.Controllers
 
             var pagat = await pagaRepository.GetAll();
             var pagatDetails = pagat.Where(x => x.PunetoriId == id).OrderByDescending(x=>x.Muaji).Take(6);
+            var kontratat = await kontrataRepository.GetAll();
+            var kontratatDetails = kontratat.Where(x => x.PunetoriId == id).OrderByDescending(x => x.Created).Take(6);
 
             foreach (var item in pagatDetails)
             {
@@ -120,10 +127,23 @@ namespace SMP.Controllers
                 {
                     Id = item.Id,
                     Viti = item.Viti,
-                    Muaji = item.Muaji,
+                    Muaji = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(item.Muaji),
                     PagaFinale = item.PagaFinale,
                     Pershkrimi = item.Pershkrimi
 
+                });
+
+            }
+            
+
+            foreach (var item in kontratatDetails)
+            {
+                model.KontrataList.Add(new KontrataList
+                {
+                    Id = item.Id,
+                    Emri = item.Emri,
+                    Status = item.Status,
+                    Created = item.Created
                 });
 
             }
@@ -267,6 +287,14 @@ namespace SMP.Controllers
             {
                 return View();
             }
+        }
+
+
+        public async Task<JsonResult> Search(string value)
+        {
+            var searched = await punetoriRepository.Search(value);
+
+            return Json(new { id=searched.Id, emri=searched.Emri, mbiemri = searched.Mbiemri });
         }
     }
 }

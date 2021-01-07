@@ -62,6 +62,7 @@ namespace SMP.ViewModels.Punetori
         public PunetoriListViewModel()
         {
             PagaList = new List<PagaList>();
+            KontrataList = new List<KontrataList>();
         }
         public int Id { get; set; }
         public string Emri { get; set; }
@@ -102,6 +103,8 @@ namespace SMP.ViewModels.Punetori
 
         public List<PagaList> PagaList { get; set; }
 
+        public List<KontrataList> KontrataList { get; set; }
+
     }
 
     public class PagaList
@@ -110,12 +113,23 @@ namespace SMP.ViewModels.Punetori
 
         public int Viti { get; set; }
 
-        public int Muaji { get; set; }
+        public string Muaji { get; set; }
 
         public decimal PagaFinale { get; set; }
 
         public string Pershkrimi { get; set; }
 
+    }
+
+    public class KontrataList
+    {
+        public int Id { get; set; }
+
+        public string Emri { get; set; }
+
+        public bool Status { get; set; }
+
+        public DateTime Created { get; set; }
     }
 }
 

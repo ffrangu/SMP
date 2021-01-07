@@ -41,5 +41,17 @@ namespace SMP.Models.Punetori
 
             return puntoriDetails;
         }
+
+        public async Task<Data.Punetori> Search(string value)
+        {
+            var search = await context.Punetori.Include(x => x.Departamenti)
+                .Include(x => x.Kompania)
+                .Include(x => x.Komuna)
+                .Include(x => x.Pozita)
+                .Include(x => x.Grada)
+                .Include(x => x.Banka).Where(x=>x.Emri.Contains(value)).FirstOrDefaultAsync();
+
+            return search;
+        }
     }
 }

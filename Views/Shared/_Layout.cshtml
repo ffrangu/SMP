@@ -217,7 +217,7 @@
                                                         </span>
                                                     </span>
                                                 </div>
-                                                <input type="text" class="form-control" placeholder="Search..." />
+                                                <input id="searchbox" type="text" class="form-control" placeholder="Search..." />
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">
                                                         <i class="quick-search-close ki ki-close icon-sm text-muted"></i>
@@ -227,7 +227,9 @@
                                         </form>
                                         <!--end::Form-->
                                         <!--begin::Scroll-->
-                                        <div class="quick-search-wrapper scroll" data-scroll="true" data-height="325" data-mobile-height="200"></div>
+                                        <div class="quick-search-wrapper scroll" data-scroll="true" data-height="325" data-mobile-height="200">
+                                            Gent Govori
+                                        </div>
                                         <!--end::Scroll-->
                                     </div>
                                 </div>
@@ -1290,6 +1292,29 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
+            $('#searchbox').on('input',function () {
+
+                var value = $('#searchbox').val();
+                
+
+                $.ajax({
+                    url: '@Url.Action("Search","Punetori")',
+                    type: 'POST',
+                    data: { value:value },
+                    success: function (data) {
+                        debugger;
+
+                    },
+                error: function () {
+                    alert("error");
+                }
+            });
+
+
+
+
+            });
+
             $(".init-select2").select2();
             $('.datepicker').datepicker({
                 format: "dd/mm/yyyy",
@@ -1320,6 +1345,8 @@
             });
         });
     </script>
+
+    
 
 </body>
 </html>
