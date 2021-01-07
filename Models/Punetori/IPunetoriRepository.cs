@@ -12,7 +12,7 @@ namespace SMP.Models.Punetori
 
         Task<Data.Punetori> GetPuntoriDetails(int? id);
 
-        Task<Data.Punetori> Search(string value);
+        Task<IEnumerable<Data.Punetori>> Search(string value);
 
     }
 }
