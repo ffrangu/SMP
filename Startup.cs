@@ -29,6 +29,7 @@ using SMP.Models.Paga;
 using SMP.Models.Punetori;
 using SMP.Models.PunetoriKontrata;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using SMP.Models.Home;
 
 namespace SMP
 {
@@ -127,9 +128,7 @@ namespace SMP
             services.AddScoped<IPagaRepository, PagaRepository>();
             services.AddScoped<IPunetoriRepository, PunetoriRepository>();
             services.AddScoped<IPunetoriKontrataRepository, PunetoriKontrataRepository>();
-
-
-
+            services.AddScoped<IHomeRepository, HomeRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
