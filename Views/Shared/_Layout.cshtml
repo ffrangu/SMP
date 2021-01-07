@@ -217,7 +217,7 @@
                                                         </span>
                                                     </span>
                                                 </div>
-                                                <input id="searchbox" type="text" class="form-control" placeholder="Search..." />
+                                                <input id="searchbox" type="text" class="form-control" autocomplete="off" placeholder="Search..." />
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">
                                                         <i class="quick-search-close ki ki-close icon-sm text-muted"></i>
@@ -228,9 +228,7 @@
                                         <!--end::Form-->
                                         <!--begin::Scroll-->
                                         <div class="quick-search-wrapper scroll" id="searchresults" data-scroll="true" data-height="325" data-mobile-height="200">
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Action</a>
-
+                                            
 
                                         </div>
                                         <!--end::Scroll-->
@@ -1314,6 +1312,7 @@
                             while (myNode.firstChild) {
                                 myNode.removeChild(myNode.lastChild);
                             }
+                           
                         }
                         else {
                             $('.quick-search-wrapper').show();
@@ -1321,10 +1320,11 @@
                                 myNode.removeChild(myNode.lastChild);
                             }
 
+
                             //for (i = 0; i < data.length; i++) {
                             //    $('#searchresults').html('<a id="'+data[i].Id+'"class="dropdown - item" href="">Action</a>');
                             //}
-                            var url = '@Url.Action("ViewFile", "Default")?id=' + $(this).data("itemid");
+                            
                             $.each(data, function (index, element) {
                                 var url = '@Url.Action("Details", "Punetori")?id=' + element.id;
                                 $('#searchresults').append($('<a>', {
