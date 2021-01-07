@@ -16,6 +16,12 @@
     <Compile Remove="Migrations\20210105184438_PagaPershkrimiField.Designer.cs" />
     <Compile Remove="Migrations\20210107092146_kontratapunetoriidentity.cs" />
     <Compile Remove="Migrations\20210107092146_kontratapunetoriidentity.Designer.cs" />
+    <Compile Remove="Migrations\20210107093755_DepartamentiIdentity.cs" />
+    <Compile Remove="Migrations\20210107093755_DepartamentiIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20210107094028_departamentidentity.cs" />
+    <Compile Remove="Migrations\20210107094028_departamentidentity.Designer.cs" />
+    <Compile Remove="Migrations\20210107094817_DepartamentiIdIdentity.cs" />
+    <Compile Remove="Migrations\20210107094817_DepartamentiIdIdentity.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

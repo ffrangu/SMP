@@ -12,6 +12,8 @@ namespace SMP.Data
             Punetori = new HashSet<Punetori>();
         }
 
+        //[Key]
+        //public int testid { get; set; }
         [Key]
         public int Id { get; set; }
         public int KompaniaId { get; set; }

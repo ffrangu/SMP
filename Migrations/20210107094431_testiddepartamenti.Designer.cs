@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SMP.Data;
 
-namespace SMP.Data.Migrations
+namespace SMP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210107094431_testiddepartamenti")]
+    partial class testiddepartamenti
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -312,7 +314,7 @@ namespace SMP.Data.Migrations
 
             modelBuilder.Entity("SMP.Data.Departamenti", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("testid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -330,6 +332,9 @@ namespace SMP.Data.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
                     b.Property<int>("KompaniaId")
                         .HasColumnType("int");
 
@@ -341,7 +346,7 @@ namespace SMP.Data.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
-                    b.HasKey("Id");
+                    b.HasKey("testid");
 
                     b.HasIndex("KompaniaId");
 
