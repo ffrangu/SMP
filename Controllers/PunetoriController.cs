@@ -294,7 +294,13 @@ namespace SMP.Controllers
         {
             var searched = await punetoriRepository.Search(value);
 
-            return Json(new { id=searched.Id, emri=searched.Emri, mbiemri = searched.Mbiemri });
+            var list = searched.Select(x => new { x.Emri, x.Mbiemri, x.Id });
+
+            
+            
+
+
+            return Json(list);
         }
     }
 }
