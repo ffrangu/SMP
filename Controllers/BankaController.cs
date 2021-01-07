@@ -59,7 +59,7 @@ namespace SMP.Controllers
         }
 
         // GET: BankaController/Create
-        public async Task<ActionResult> CreateAsync()
+        public ActionResult Create()
         {
             ViewBag.AddError = false;
             return View();

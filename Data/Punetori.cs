@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SMP.Data
 {
@@ -28,6 +29,11 @@ namespace SMP.Data
         public int GradaId { get; set; }
         public DateTime Created { get; set; }
         public string CreatedBy { get; set; }
+
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+        public string Telefoni { get; set; }
 
         public virtual Banka Banka { get; set; }
         public virtual Departamenti Departamenti { get; set; }

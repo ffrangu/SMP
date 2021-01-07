@@ -170,7 +170,7 @@ namespace SMP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateAsync(PunetoriCreateViewModel model)
         {
-            bool showError = false;
+            //bool showError = false;
             if (ModelState.IsValid)
             {
                 
@@ -193,8 +193,9 @@ namespace SMP.Controllers
                         Xhirollogaria = model.Xhirollogaria,
                         GradaId = model.GradaId,
                         Created = DateTime.Now,
-                        CreatedBy = user.UserName
-
+                        CreatedBy = user.UserId,
+                        Email = model.Email,
+                        Telefoni = model.Telefoni
                     };
 
                     var result = await punetoriRepository.AddAsync(addPunetor);
@@ -203,16 +204,16 @@ namespace SMP.Controllers
                     {
                         FirstName = model.Emri,
                         LastName = model.Mbiemri,
-                        Email = model.Emri + "." + model.Mbiemri + "@gmail.com",
+                        Email = model.Email,
                         UserName = model.NumriPersonal,
                         Address = model.Adresa,
-                        PhoneNumber = "",
+                        PhoneNumber = model.Telefoni,
                         KompaniaId = model.KompaniaId,
                         EmailConfirmed = true,
                         DepartamentiId = model.DepartamentiId
                     };
 
-                    var resultUser = await userManager.CreateAsync(addUser, "12345678Aa#");
+                    var resultUser = await userManager.CreateAsync(addUser, "123456789Aa#");
 
                     if(resultUser.Succeeded)
                     {
@@ -230,20 +231,33 @@ namespace SMP.Controllers
 
                     alertService.Success("Punetori u regjistrua me sukses!");
 
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Index");
 
 
                 }
                 catch (Exception ex)
                 {
+                    var exception = ex;
                     alertService.Danger("Diqka shkoi keq!");
+                    ViewBag.KomunaId = await kompaniaRepository.LoadKomuna(null);
+                    ViewBag.Departamenti = await departamentiRepository.DepartamentiSelectList(null, false, false);
+                    ViewBag.Kompania = await kompaniaRepository.KompaniaSelectList(null, false, false);
+                    ViewBag.Pozita = await pozitaRepository.PozitaSelectList(null, false, false);
+                    ViewBag.Banka = await bankaRepository.BankaSelectList(null, false, false);
+                    ViewBag.Grada = await gradaRepository.GradaSelectList(null, false, false);
+
                     return View(model);
 
                 }
             }
 
             alertService.Information("Mbushi te gjitha fushat!");
-
+            ViewBag.KomunaId = await kompaniaRepository.LoadKomuna(null);
+            ViewBag.Departamenti = await departamentiRepository.DepartamentiSelectList(null, false, false);
+            ViewBag.Kompania = await kompaniaRepository.KompaniaSelectList(null, false, false);
+            ViewBag.Pozita = await pozitaRepository.PozitaSelectList(null, false, false);
+            ViewBag.Banka = await bankaRepository.BankaSelectList(null, false, false);
+            ViewBag.Grada = await gradaRepository.GradaSelectList(null, false, false);
             return View(model);
         }
 
