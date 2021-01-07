@@ -95,23 +95,30 @@ namespace SMP.Models.Kompania
         {
             var kompanite = await GetCompanies();
             var filteredCompanies = new List<Data.Kompania>();
-            if(Role == "HR")
-            {
-                filteredCompanies = kompanite.Where(q => q.Id == KompaniaId.Value).ToList();
-            }
-            else
-            {
-                filteredCompanies = kompanite.Where(q=>!q.ParentId.HasValue).ToList();
-            }
 
             var returnItems = new List<Data.Kompania>();
             var listItems = new List<KompaniaListViewModel>();
 
-            foreach (var item in filteredCompanies)
+            if (Role == "HR")
             {
-                returnItems.Add(new Data.Kompania { Id = item.Id, Emri = item.Emri.ToUpper() });
+                filteredCompanies = kompanite.Where(q => q.Id == KompaniaId.Value).ToList();
+                foreach (var item in filteredCompanies)
+                {
+                    returnItems.Add(new Data.Kompania { Id = item.Id, Emri = item.Emri.ToUpper() });
 
-                KompaniaSubTree(kompanite, item, returnItems, false, listItems);
+                    //KompaniaSubTree(filteredCompanies, item, returnItems, false, listItems);
+                }
+            }
+            else
+            {
+                filteredCompanies = kompanite.Where(q=>!q.ParentId.HasValue).ToList();
+
+                foreach (var item in filteredCompanies)
+                {
+                    returnItems.Add(new Data.Kompania { Id = item.Id, Emri = item.Emri.ToUpper() });
+
+                    //KompaniaSubTree(kompanite, item, returnItems, false, listItems);
+                }
             }
 
             return new SelectList(returnItems, "Id", "Emri");

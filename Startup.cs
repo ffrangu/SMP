@@ -28,6 +28,7 @@ using SMP.Models.Departamenti;
 using SMP.Models.Paga;
 using SMP.Models.Punetori;
 using SMP.Models.PunetoriKontrata;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace SMP
 {
@@ -115,6 +116,7 @@ namespace SMP
                 options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
             });
 
+            services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IBankRepository, BankRepository>();
