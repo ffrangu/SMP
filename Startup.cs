@@ -29,6 +29,8 @@ using SMP.Models.Paga;
 using SMP.Models.Punetori;
 using SMP.Models.PunetoriKontrata;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using SMP.Models.Home;
+using SMP.Models.Bonuset;
 
 namespace SMP
 {
@@ -127,6 +129,8 @@ namespace SMP
             services.AddScoped<IPagaRepository, PagaRepository>();
             services.AddScoped<IPunetoriRepository, PunetoriRepository>();
             services.AddScoped<IPunetoriKontrataRepository, PunetoriKontrataRepository>();
+            services.AddScoped<IHomeRepository, HomeRepository>();
+            services.AddScoped<IBonusetRepository, BonusetRepository>();
 
 
 
