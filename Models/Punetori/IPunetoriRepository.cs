@@ -1,4 +1,5 @@
-﻿using SMP.Data;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using SMP.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace SMP.Models.Punetori
     public interface IPunetoriRepository : IGenericRepository<Data.Punetori>
     {
         Task<IEnumerable<Data.Punetori>> GetPuntor();
+
+        Task<SelectList> PunetoretSelectList(int? KompaniaId, string Role);
 
         Task<Data.Punetori> GetPuntoriDetails(int? id);
 

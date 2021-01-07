@@ -131,8 +131,8 @@ namespace SMP.Controllers
                    role.In("Administrator") ? new MenuItems{ Text = "Bonuset", Controller="", Action="", Selected = false, Icon = "menu-icon fa fa-tree",
                    SubMenu = new List<MenuItems>
                    {
-                       new MenuItems { Text= "Bonuset", Controller="Bonus", Action="Index", Icon = "menu-bullet menu-bullet-dot", Selected = false },
-                       new MenuItems { Text= "Regjistro bonus", Controller="Bonus", Action="Create", Icon = "menu-bullet menu-bullet-dot", Selected = false },
+                       new MenuItems { Text= "Bonuset", Controller="Bonuset", Action="Index", Icon = "menu-bullet menu-bullet-dot", Selected = false },
+                       new MenuItems { Text= "Regjistro bonus", Controller="Bonuset", Action="Create", Icon = "menu-bullet menu-bullet-dot", Selected = false },
                    }} : null,
 
                    role.In("Administrator") ? new MenuItems{ Text = "Punëtori", Controller="", Action="", Selected = false, Icon = "menu-icon fa fa-tree",

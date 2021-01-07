@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using SMP.Data;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,32 @@ namespace SMP.Models.Punetori
 
         public PunetoriRepository(ApplicationDbContext context) : base(context)
         {
+
+        }
+
+        public async Task<SelectList> PunetoretSelectList(int? KompaniaId, string Role)
+        {
+            var punetoret = await GetPuntor();
+            var filteredPuntore = new List<Data.Punetori>();
+            var returnItems = new List<Data.Punetori>();
+            if(Role == "HR")
+            {
+                filteredPuntore = punetoret.Where(q => q.KompaniaId == KompaniaId).ToList();
+
+                foreach (var item in filteredPuntore)
+                {
+                    returnItems.Add(new Data.Punetori { Id = item.Id, Emri = item.Emri.ToUpper(), Mbiemri = item.Mbiemri.ToUpper() });
+                }
+            }
+            else
+            {
+                foreach (var item in punetoret)
+                {
+                    returnItems.Add(new Data.Punetori { Id = item.Id, Emri = item.Emri.ToUpper(), Mbiemri = item.Mbiemri.ToUpper(),Email = item.Emri.ToUpper() + " " + item.Mbiemri.ToUpper() });
+                }
+            }
+
+            return new SelectList(returnItems, "Id", "Email");
 
         }
 
