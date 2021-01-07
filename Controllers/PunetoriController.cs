@@ -46,7 +46,7 @@ namespace SMP.Controllers
         private IPagaRepository pagaRepository;
         private readonly ILogger<PunetoriController> logger;
 
-        public PunetoriController(IPunetoriKontrataRepository _kontrataRepository,IPagaRepository _pagaRepository,IPunetoriRepository _punetoriRepository,IGradaRepository _gradaRepository,IPozitaRepository _pozitaRepository, IBankRepository _bankaRepository, IDepartamentiRepository _departamentiRepository, IKompaniaRepository _kompaniaRepository, RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager,
+        public PunetoriController(IPunetoriKontrataRepository _kontrataRepository, IPagaRepository _pagaRepository,IPunetoriRepository _punetoriRepository,IGradaRepository _gradaRepository,IPozitaRepository _pozitaRepository, IBankRepository _bankaRepository, IDepartamentiRepository _departamentiRepository, IKompaniaRepository _kompaniaRepository, RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager,
             AlertService _alertService, ILogger<PunetoriController> _logger) 
             : base(_roleManager,_userManager)
         {
@@ -62,8 +62,8 @@ namespace SMP.Controllers
             logger = _logger;
             pagaRepository = _pagaRepository;
             kontrataRepository = _kontrataRepository;
-            
-    }
+
+        }
 
         // GET: PunetoriController
         public async Task<ActionResult> IndexAsync()
@@ -134,7 +134,7 @@ namespace SMP.Controllers
                 });
 
             }
-            
+
 
             foreach (var item in kontratatDetails)
             {

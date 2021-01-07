@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SMP.Data
 {
     public partial class PunetoriKontrata
     {
+        [Key]
         public int Id { get; set; }
         public int PunetoriId { get; set; }
         public string Emri { get; set; }

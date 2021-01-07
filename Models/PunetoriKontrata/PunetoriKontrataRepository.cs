@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SMP.Models.PunetoriKontrata
 {
-    public class PunetoriKontrataRepository :GenericRepository<Data.PunetoriKontrata>, IPunetoriKontrataRepository
+    public class PunetoriKontrataRepository : GenericRepository<Data.PunetoriKontrata>, IPunetoriKontrataRepository
     {
         public PunetoriKontrataRepository(ApplicationDbContext context) : base(context)
         {

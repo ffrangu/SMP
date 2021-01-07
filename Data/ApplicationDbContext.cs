@@ -302,7 +302,7 @@ namespace SMP.Data
             {
                 entity.ToTable("PUNETORI_KONTRATA");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Created).HasColumnType("datetime");
 
@@ -319,7 +319,7 @@ namespace SMP.Data
                     .IsRequired()
                     .HasMaxLength(200);
 
-                entity.Property(e => e.PunetoriId).ValueGeneratedOnAdd();
+                entity.Property(e => e.PunetoriId);
 
                 entity.HasOne(d => d.Punetori)
                     .WithMany(p => p.PunetoriKontrata)
