@@ -54,7 +54,7 @@ namespace SMP.Helpers
                     "<header> <h4>Hello,</h4> </header>" +
                     "{0}" +
                     "<footer>" +
-                    "<h4>GSM" +
+                    "<h4>SMP" +
                     "</h4>" +
                     "<span>" +
                     "<img src = '{1}' width='128' height='30' /></span>" +
