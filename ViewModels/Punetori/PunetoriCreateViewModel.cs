@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SMP.ViewModels.Punetori
 {
-        public class PunetoriCreateViewModel
+    public class PunetoriCreateViewModel
     {
         public int Id { get; set; }
 
@@ -52,10 +52,10 @@ namespace SMP.ViewModels.Punetori
         public int GradaId { get; set; }
 
         public string Telefoni { get; set; }
-        
+
         public DateTime Created { get; set; }
 
-        
+
         public string CreatedBy { get; set; }
 
     }
@@ -136,6 +136,11 @@ namespace SMP.ViewModels.Punetori
         public bool Status { get; set; }
 
         public DateTime Created { get; set; }
+    }
+
+    public class PunetoriEditViewModel : PunetoriCreateViewModel
+    {
+
     }
 }
 

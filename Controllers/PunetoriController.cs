@@ -262,24 +262,105 @@ namespace SMP.Controllers
         }
 
         // GET: PunetoriController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> EditAsync(int? id)
         {
-            return View();
+            ViewBag.AddError = false;
+            if (id == null)
+            {
+                ViewBag.ErrorTitle = $"Id cannot be null";
+                return View("_NotFound");
+            }
+
+            var punetori = await punetoriRepository.Get(id);
+
+            if(punetori == null)
+            {
+                ViewBag.ErrorTitle = $"Punetori me këtë { id } nuk është gjetur!";
+                return View("_NotFound");
+            }
+
+            PunetoriEditViewModel model = new PunetoriEditViewModel
+            {
+                Id = punetori.Id,
+                UserId = punetori.UserId,
+                Emri = punetori.Emri,
+                Mbiemri = punetori.Mbiemri,
+                NumriPersonal = punetori.NumriPersonal,
+                Datelindja = punetori.Datelindja,
+                Email = punetori.Email,
+                Adresa = punetori.Adresa,
+                KompaniaId = punetori.KompaniaId,
+                KomunaId = punetori.KomunaId,
+                DepartamentiId = punetori.DepartamentiId,
+                PozitaId = punetori.PozitaId,
+                BankaId = punetori.BankaId,
+                Xhirollogaria = punetori.Xhirollogaria,
+                GradaId = punetori.GradaId,
+                Telefoni = punetori.Telefoni,
+            };
+            ViewBag.KomunaId = await kompaniaRepository.LoadKomuna(null);
+            ViewBag.Departamenti = await departamentiRepository.DepartamentiSelectList(null, false, false);
+            ViewBag.Kompania = await kompaniaRepository.KompaniaSelectList(null, false, false);
+            ViewBag.Pozita = await pozitaRepository.PozitaSelectList(null, false, false);
+            ViewBag.Banka = await bankaRepository.BankaSelectList(null, false, false);
+            ViewBag.Grada = await gradaRepository.GradaSelectList(null, false, false);
+
+            return View(model);
         }
 
         // POST: PunetoriController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> EditAsync(PunetoriEditViewModel model)
         {
-            try
+           if(ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    var editPunetori = await punetoriRepository.Get(model.Id);
+                    editPunetori.Emri = model.Emri;
+                    editPunetori.Mbiemri = model.Mbiemri;
+                    editPunetori.NumriPersonal = model.NumriPersonal;
+                    editPunetori.Datelindja = model.Datelindja;
+                    editPunetori.Adresa = model.Adresa;
+                    editPunetori.KomunaId = model.KomunaId;
+                    editPunetori.KompaniaId = model.KompaniaId;
+                    editPunetori.DepartamentiId = model.DepartamentiId;
+                    editPunetori.PozitaId = model.PozitaId;
+                    editPunetori.BankaId = model.BankaId;
+                    editPunetori.Xhirollogaria = model.Xhirollogaria;
+                    editPunetori.GradaId = model.GradaId;
+                    editPunetori.CreatedBy = user.UserId;
+                    editPunetori.Email = model.Email;
+                    editPunetori.Telefoni = model.Telefoni;
+                    var editedPunetor = await punetoriRepository.Update(editPunetori);
+
+                    var editUser = await userManager.FindByIdAsync(editPunetori.UserId);
+                    editUser.FirstName = model.Emri;
+                    editUser.LastName = model.Mbiemri;
+                    editUser.Email = model.Email;
+                    editUser.KompaniaId = model.KompaniaId;
+                    editUser.DepartamentiId = model.DepartamentiId;
+                    editUser.UserName = model.NumriPersonal;
+                    editUser.PhoneNumber = model.Telefoni;
+                    editUser.Address = model.Adresa;
+
+                    var editedUser = await userManager.UpdateAsync(editUser);
+
+                    alertService.Success("Punetori u editua me sukses!");
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception)
+                {
+
+                    alertService.Danger("Diqka shkoi keq!");
+                    return View(model);
+                }
             }
-            catch
-            {
-                return View();
-            }
+            alertService.Information("Mbushi te gjitha fushat!");
+
+            return View(model);
         }
 
         // GET: PunetoriController/Delete/5

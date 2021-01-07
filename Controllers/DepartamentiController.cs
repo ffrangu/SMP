@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SMP.Data;
 using SMP.Helpers;
 using SMP.Models.Departamenti;
@@ -201,5 +202,29 @@ namespace SMP.Controllers
                 return View();
             }
         }
+
+        public async Task<ActionResult> GetDepartments(int KompaniaId, long? selectedValue = null)
+        {
+            SelectList Departments = null;
+            try
+            {
+                if(KompaniaId>0)
+                {
+                    var departments = await departamentiRepository.GetAll();
+                    var filteredDepartments = departments.Where(x => x.KompaniaId == KompaniaId);
+
+                    Departments = new SelectList(filteredDepartments, "Id", "Emri");
+                    ViewBag.Departamenti = departments;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                
+            }
+            return Json(Departments);
+        }
+
+            
     }
 }

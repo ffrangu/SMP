@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SMP.Data;
 using SMP.Helpers;
 using SMP.Models.Departamenti;
@@ -212,6 +213,30 @@ namespace SMP.Controllers
             {
                 return View();
             }
+        }
+
+
+        public async Task<ActionResult> GetPozita (int DepartamentiId,int KompaniaId, long? selectedValue = null)
+        {
+            SelectList Pozita = null;
+            try
+            {
+                if(DepartamentiId>0)
+                {
+                    var pozitat = await pozitaRepository.GetAll();
+                    var filteredPozitat = pozitat.Where(x => x.DepartamentiId == DepartamentiId && x.KompaniaId == KompaniaId);
+                    Pozita = new SelectList(filteredPozitat, "Id", "Emri");
+                    ViewBag.Pozita = pozitat;
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return Json(Pozita);
         }
     }
 }
