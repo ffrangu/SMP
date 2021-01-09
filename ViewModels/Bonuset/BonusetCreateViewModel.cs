@@ -33,4 +33,26 @@ namespace SMP.ViewModels.Bonuset
         public string CreatedBy { get; set; }
 
     }
+
+    public class BonusetListViewModel
+    {
+        public int Id { get; set; }
+
+        public int Muaji { get; set; }
+
+        public int Viti { get; set; }
+
+        public int PunetoriId { get; set; }
+
+        public string Punetori { get; set; }
+
+        public string Pershkrimi { get; set; }
+
+        public decimal Vlera { get; set; }
+    }
+
+    public class BonusetEditViewModel : BonusetCreateViewModel
+    {
+
+    }
 }

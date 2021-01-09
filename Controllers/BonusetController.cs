@@ -39,9 +39,30 @@ namespace SMP.Controllers
 
         }
         // GET: BonusetController
-        public ActionResult Index()
+        public async Task<ActionResult> IndexAsync()
         {
-            return View();
+            string role = User.IsInRole("HR") ? "HR" : "Administrator";
+            var bonuset = await bonusetRepository.getBonusetbyKompaniaId(user.KompaniaId, role);
+            var listItems = new List<BonusetListViewModel>();
+
+            foreach (var item in bonuset)
+            {
+                listItems.Add(new BonusetListViewModel
+                {
+                    Id = item.Id,
+                    Muaji = item.Muaji,
+                    Viti = item.Viti,
+                    PunetoriId = item.PunetoriId,
+                    Punetori = item.Punetori.Emri,
+                    Pershkrimi = item.Pershkrimi,
+                    Vlera = item.Vlera
+
+
+                });
+
+            }
+
+            return View(listItems);
         }
 
         // GET: BonusetController/Details/5
@@ -113,24 +134,91 @@ namespace SMP.Controllers
         }
 
         // GET: BonusetController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> EditAsync(int? id)
         {
-            return View();
+            ViewBag.AddError = false;
+            if (id == null)
+            {
+                ViewBag.ErrorTitle = $"Id cannot be null";
+                return View("_NotFound");
+            }
+
+            var bonus = await bonusetRepository.Get(id);
+
+            if (bonus == null)
+            {
+                ViewBag.ErrorTitle = $"Bonusi me këtë { id } nuk është gjetur!";
+                return View("_NotFound");
+            }
+
+            BonusetEditViewModel model = new BonusetEditViewModel
+            {
+                Id = bonus.Id,
+                Muaji = bonus.Muaji,
+                Viti = bonus.Viti,
+                PunetoriId = bonus.PunetoriId,
+                Pershkrimi = bonus.Pershkrimi,
+                Vlera = bonus.Vlera,
+                Bruto = bonus.Bruto
+            };
+
+            string role = User.IsInRole("HR") ? "HR" : "Administrator";
+            ViewBag.Punetori = await punetoriRepository.PunetoretSelectList(user.KompaniaId, role);
+
+            ViewBag.Muaji = new SelectList(Enumerable.Range(1, 12).Select(x =>
+                                 new SelectListItem()
+                                 {
+                                     Text = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[x - 1] + " (" + x + ")",
+                                     Value = x.ToString()
+                                 }), "Value", "Text", bonus.Muaji);
+
+
+            ViewBag.Viti = new SelectList(Enumerable.Range(DateTime.Today.Year - 1, 2).Select(x =>
+                           new SelectListItem()
+                           {
+                               Text = x.ToString(),
+                               Value = x.ToString()
+                           }), "Value", "Text", bonus.Viti);
+            return View(model);
         }
 
         // POST: BonusetController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> EditAsync(BonusetEditViewModel model)
         {
-            try
+            if(ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    var editBonus = await bonusetRepository.Get(model.Id);
+                    editBonus.Muaji = model.Muaji;
+                    editBonus.Viti = model.Viti;
+                    editBonus.PunetoriId = model.PunetoriId;
+                    editBonus.Pershkrimi = model.Pershkrimi;
+                    editBonus.Vlera = model.Vlera;
+                    editBonus.Bruto = model.Bruto;
+                    editBonus.Created = DateTime.Now;
+                    editBonus.CreatedBy = user.UserId;
+
+                    var editedBonus = await bonusetRepository.Update(editBonus);
+
+                    alertService.Success("Punetori u editua me sukses!");
+
+                    return RedirectToAction(nameof(Index));
+
+
+                }
+                catch (Exception)
+                {
+
+                    alertService.Danger("Diqka shkoi keq!");
+                    return View(model);
+                }
             }
-            catch
-            {
-                return View();
-            }
+            alertService.Information("Mbushi te gjitha fushat!");
+
+            return View(model);
         }
 
         // GET: BonusetController/Delete/5
