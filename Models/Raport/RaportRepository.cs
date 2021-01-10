@@ -78,7 +78,7 @@ namespace SMP.Models.Raport
                                 Pozita = p.Punetori.Pozita.Emri,
                                 Grada = p.Grada.Emri,
                                 Viti = p.Viti,
-                                Muaji = p.Muaji,
+                                MuajiInt = p.Muaji,
                                 Bruto = p.Bruto,
                                 Kontributi = p.KontributiPunetori,
                                 PagaPaTatimuar = p.PagaTatim,

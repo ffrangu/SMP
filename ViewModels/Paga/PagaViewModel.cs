@@ -37,7 +37,7 @@ namespace SMP.ViewModels.Paga
 
         public int Viti { get; set; }
 
-        public int Muaji { get; set; }
+        public string Muaji { get; set; }
 
         public decimal Bruto { get; set; }
 
@@ -62,6 +62,8 @@ namespace SMP.ViewModels.Paga
         public int BankaId { get; set; }
 
         public decimal? BonuseNeto { get; set; }
+
+        public int MuajiInt { get; set; }
     }
 
     public class PagaCreateViewModel
