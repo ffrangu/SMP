@@ -73,6 +73,10 @@ namespace SMP.ViewModels.Punetori
 
         public string Mbiemri { get; set; }
 
+        public string Telefoni { get; set; }
+
+        public string Email { get; set; }
+
         public string NumriPersonal { get; set; }
 
         public DateTime Datelindja { get; set; }
@@ -105,7 +109,7 @@ namespace SMP.ViewModels.Punetori
 
         public string Grada { get; set; }
 
-        public string Email { get; set; }
+        
 
         public List<PagaList> PagaList { get; set; }
 

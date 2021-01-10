@@ -45,4 +45,18 @@
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\assets\js\pages\features\dropzone-5.7.0\.gitignore" />
+    <None Include="wwwroot\assets\js\pages\features\dropzone-5.7.0\.tagconfig" />
+    <None Include="wwwroot\assets\js\pages\features\dropzone-5.7.0\CONTRIBUTING.md" />
+    <None Include="wwwroot\assets\js\pages\features\dropzone-5.7.0\dist\dropzone-amd-module.js" />
+    <None Include="wwwroot\assets\js\pages\features\dropzone-5.7.0\dist\dropzone5.7.js" />
+    <None Include="wwwroot\assets\js\pages\features\dropzone-5.7.0\dist\dropzone5.7.js.map" />
+    <None Include="wwwroot\assets\js\pages\features\dropzone-5.7.0\dist\min\dropzone-amd-module.min.js" />
+    <None Include="wwwroot\assets\js\pages\features\dropzone-5.7.0\dist\min\dropzone.min.js" />
+    <None Include="wwwroot\assets\js\pages\features\dropzone-5.7.0\index.js" />
+    <None Include="wwwroot\assets\js\pages\features\dropzone-5.7.0\LICENSE" />
+    <None Include="wwwroot\assets\js\pages\features\dropzone-5.7.0\README.md" />
+  </ItemGroup>
+
 </Project>

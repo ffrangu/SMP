@@ -14,6 +14,7 @@
     <link href="~/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="~/assets/plugins/custom/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
     <link href="~/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/js/pages/features/dropzone-5.7.0/dist/dropzone.css" rel="stylesheet" />
     <style>
         .required:after {
             content: " *";
@@ -228,7 +229,7 @@
                                         <!--end::Form-->
                                         <!--begin::Scroll-->
                                         <div class="quick-search-wrapper scroll" id="searchresults" data-scroll="true" data-height="325" data-mobile-height="200">
-                                            
+
 
                                         </div>
                                         <!--end::Scroll-->
@@ -452,23 +453,23 @@
                 <!--end::Content-->
                 <!--begin::Footer-->
                 <!--<div class="footer bg-white py-4 d-flex flex-lg-column" id="kt_footer">-->
-                    <!--begin::Container-->
-                    <!--<div class="container d-flex flex-column flex-md-row align-items-center justify-content-between">-->
-                        <!--begin::Copyright-->
-                        <!--<div class="text-dark order-2 order-md-1">
-                            <span class="text-muted font-weight-bold mr-2"> @DateTime.Now.Year ©</span>
-                            <a href="javascript:;" class="text-dark-75 text-hover-primary">SMP</a>
-                        </div>-->
-                        <!--end::Copyright-->
-                        <!--begin::Nav-->
-                        <!--<div class="nav nav-dark order-1 order-md-2">
-                            <a href="javascript:;" class="nav-link pr-3 pl-0">About</a>
-                            <a href="javascript:;" class="nav-link px-3">Team</a>
-                            <a href="javascript:;" class="nav-link pl-3 pr-0">Contact</a>
-                        </div>-->
-                        <!--end::Nav-->
-                    <!--</div>-->
-                    <!--end::Container-->
+                <!--begin::Container-->
+                <!--<div class="container d-flex flex-column flex-md-row align-items-center justify-content-between">-->
+                <!--begin::Copyright-->
+                <!--<div class="text-dark order-2 order-md-1">
+                    <span class="text-muted font-weight-bold mr-2"> @DateTime.Now.Year ©</span>
+                    <a href="javascript:;" class="text-dark-75 text-hover-primary">SMP</a>
+                </div>-->
+                <!--end::Copyright-->
+                <!--begin::Nav-->
+                <!--<div class="nav nav-dark order-1 order-md-2">
+                    <a href="javascript:;" class="nav-link pr-3 pl-0">About</a>
+                    <a href="javascript:;" class="nav-link px-3">Team</a>
+                    <a href="javascript:;" class="nav-link pl-3 pr-0">Contact</a>
+                </div>-->
+                <!--end::Nav-->
+                <!--</div>-->
+                <!--end::Container-->
                 <!--</div>-->
                 <!--end::Footer-->
             </div>
@@ -1290,9 +1291,9 @@
     <script src="~/assets/js/pages/features/forms/widgets/select2.js"></script>
     <script src="~/assets/js/pages/features/charts/apexcharts.js"></script>
     @RenderSection("Scripts", required: false)
-<script type="text/javascript">
+    <script type="text/javascript">
         $(document).ready(function () {
-
+            Dropzone.autoDiscover = false;
             $('#searchbox').on('input',function () {
 
                 var value = $('#searchbox').val();
@@ -1312,7 +1313,7 @@
                             while (myNode.firstChild) {
                                 myNode.removeChild(myNode.lastChild);
                             }
-                           
+
                         }
                         else {
                             $('.quick-search-wrapper').show();
@@ -1324,7 +1325,7 @@
                             //for (i = 0; i < data.length; i++) {
                             //    $('#searchresults').html('<a id="'+data[i].Id+'"class="dropdown - item" href="">Action</a>');
                             //}
-                            
+
                             $.each(data, function (index, element) {
                                 var url = '@Url.Action("Details", "Punetori")?id=' + element.id;
                                 $('#searchresults').append($('<a>', {
@@ -1383,9 +1384,9 @@
                 }
             });
         });
-</script>
+    </script>
 
-    
+
 
 </body>
 </html>
