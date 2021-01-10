@@ -148,9 +148,12 @@ namespace SMP.Controllers
 
                     foreach (var item in punetoret)
                     {
+                        var brutoBonuset = await pagaRepository.GetBonus(item.Id, model.Muaji, model.Viti, true);
+                        var netoBonuset = await pagaRepository.GetBonus(item.Id, model.Muaji, model.Viti, false);
+
                         decimal perqindja = (5.00m / 100.00m);
 
-                        var pagaBruto = item.Grada.PagaMujore;
+                        var pagaBruto = item.Grada.PagaMujore + brutoBonuset;
 
                         decimal kontributi = (perqindja * pagaBruto);
 
@@ -160,7 +163,7 @@ namespace SMP.Controllers
 
                         decimal pagatatimuar = paganeto - tatimi;
 
-                        decimal pagafinale = pagatatimuar;
+                        decimal pagafinale = pagatatimuar + netoBonuset;
 
                         pagas.Add(new Paga { 
                             PunetoriId = item.Id,
@@ -173,7 +176,8 @@ namespace SMP.Controllers
                             PagaTatim = paganeto,
                             Tatimi = tatimi,
                             PagaNeto = pagatatimuar,
-                            Bonuse = null,
+                            Bonuse = brutoBonuset,
+                            BonuseNeto = netoBonuset,
                             PagaFinale = pagafinale,
                             MenyraEkzekutimit = 1, // automatike
                             DataEkzekutimit = DateTime.Now,

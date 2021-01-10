@@ -22,6 +22,8 @@
     <Compile Remove="Migrations\20210107094028_departamentidentity.Designer.cs" />
     <Compile Remove="Migrations\20210107094817_DepartamentiIdIdentity.cs" />
     <Compile Remove="Migrations\20210107094817_DepartamentiIdIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20210110115339_BonusetNetoField.cs" />
+    <Compile Remove="Migrations\20210110115339_BonusetNetoField.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

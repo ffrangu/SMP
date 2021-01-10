@@ -218,5 +218,30 @@ namespace SMP.Models.Paga
 
             return user;
         }
+
+        public async Task<decimal> GetBonus(int PunetoriId, int Muaji, int Viti, bool Bruto)
+        {
+            decimal shuma = 0m;
+            if(Bruto)
+            {
+                var brutoBonuset = await context.Bonuset.Where(q => q.PunetoriId == PunetoriId && q.Muaji == Muaji && q.Viti == Viti && q.Bruto).ToListAsync();
+
+                if(brutoBonuset.Count > 0)
+                {
+                    shuma = brutoBonuset.Sum(q => q.Vlera);
+                }
+            }
+            else
+            {
+                var netoBonuset = await context.Bonuset.Where(q => q.PunetoriId == PunetoriId && q.Muaji == Muaji && q.Viti == Viti && !q.Bruto).ToListAsync();
+
+                if(netoBonuset.Count > 0)
+                {
+                    shuma = netoBonuset.Sum(q => q.Vlera);
+                }
+            }
+
+            return shuma;
+        }
     }
 }

@@ -26,5 +26,7 @@ namespace SMP.Models.Paga
         Task<Data.Paga> GetPaga(int Id);
 
         Task<ApplicationUser> GetPunetoriUser(int PunetoriId);
+
+        Task<decimal> GetBonus(int PunetoriId, int Muaji, int Viti, bool Bruto);
     }
 }

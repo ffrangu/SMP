@@ -22,6 +22,7 @@ namespace SMP.Data
         public decimal Tatimi { get; set; }
         public decimal PagaNeto { get; set; }
         public decimal? Bonuse { get; set; }
+        public decimal? BonuseNeto { get; set; }
         public decimal PagaFinale { get; set; }
         public int MenyraEkzekutimit { get; set; }
         public DateTime DataEkzekutimit { get; set; }

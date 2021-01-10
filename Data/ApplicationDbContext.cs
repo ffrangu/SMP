@@ -169,6 +169,8 @@ namespace SMP.Data
 
                 entity.Property(e => e.Bonuse).HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.BonuseNeto).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.Bruto).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.CreatedBy)
