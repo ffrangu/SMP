@@ -14,6 +14,7 @@
     <link href="~/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="~/assets/plugins/custom/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
     <link href="~/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/js/pages/features/dropzone-5.7.0/dist/dropzone.css" rel="stylesheet" />
     <style>
         .required:after {
             content: " *";
@@ -1299,7 +1300,7 @@
     @RenderSection("Scripts", required: false)
     <script type="text/javascript">
         $(document).ready(function () {
-
+            Dropzone.autoDiscover = false;
             $('#searchbox').on('input',function () {
 
                 var value = $('#searchbox').val();
