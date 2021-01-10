@@ -196,6 +196,7 @@
             </div>
         </div>
 
+        <form>
         <div class="card-body" style="background-color:#FFFFFF">
             <div class="form-group row">
                 <label class="col-form-label col-lg-3 col-sm-12 text-lg-right">Ngarkimi i kontrates</label>
@@ -215,15 +216,17 @@
         </div>
 
 
+
         <div class="card-footer">
             <div class="row">
                 <div class="col-lg-3"></div>
                 <div class="col-lg-4">
-                    <button type="reset" class="btn btn-light-primary mr-2" id="uploadContract">Submit</button>
-                    <button type="reset" class="btn btn-primary">Cancel</button>
+                    <button type="reset" class="btn btn-light-primary mr-2" id="uploadContract">Ngarko</button>
+                    <button type="reset" class="btn btn-primary">Anulo</button>
                 </div>
             </div>
         </div>
+            </form>
 
 
     </div>
@@ -236,7 +239,16 @@
     <script>
         $(document).ready(function () {
             Dropzone.autoDiscover = false;
-            var myDropzone = new Dropzone("div#kt_dropzone_1", { url: "/file/post", autoProcessQueue: false, addRemoveLinks: true });
+            var myDropzone = new Dropzone("div#kt_dropzone_1", {
+                url: "@Url.Action("UploadContract", "Punetori",new {id=Model.Id })", autoProcessQueue: false, addRemoveLinks: true,
+                success: function (data) {
+                    alert("Ngarkimi i kontrates u krye me sukses!");
+                    window.location.href = '@Url.Action("Details","Punetori",new { id=Model.Id})';
+
+                }
+
+
+            });
 
             $("#uploadContract").click(function (e) {
                 e.preventDefault();

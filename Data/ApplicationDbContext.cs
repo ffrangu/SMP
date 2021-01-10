@@ -314,8 +314,7 @@ namespace SMP.Data
 
                 entity.Property(e => e.Emri)
                     .IsRequired()
-                    .HasMaxLength(10)
-                    .IsFixedLength();
+                    .HasColumnType("nvarchar(200)");
 
                 entity.Property(e => e.Path)
                     .IsRequired()

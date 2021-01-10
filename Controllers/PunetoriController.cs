@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -17,6 +18,7 @@ using SMP.ViewModels.Punetori;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -45,9 +47,10 @@ namespace SMP.Controllers
 
         private IPagaRepository pagaRepository;
         private readonly ILogger<PunetoriController> logger;
+        public IWebHostEnvironment _hostEnvironment { get; }
 
         public PunetoriController(IPunetoriKontrataRepository _kontrataRepository, IPagaRepository _pagaRepository,IPunetoriRepository _punetoriRepository,IGradaRepository _gradaRepository,IPozitaRepository _pozitaRepository, IBankRepository _bankaRepository, IDepartamentiRepository _departamentiRepository, IKompaniaRepository _kompaniaRepository, RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager,
-            AlertService _alertService, ILogger<PunetoriController> _logger) 
+            AlertService _alertService, ILogger<PunetoriController> _logger,IWebHostEnvironment hostEnvironment) 
             : base(_roleManager,_userManager)
         {
             userManager = _userManager;
@@ -62,6 +65,7 @@ namespace SMP.Controllers
             logger = _logger;
             pagaRepository = _pagaRepository;
             kontrataRepository = _kontrataRepository;
+            _hostEnvironment = hostEnvironment;
 
         }
 
@@ -119,12 +123,75 @@ namespace SMP.Controllers
             return View(model);
         }
 
+    
+        public async Task<ActionResult> UploadContractAsync (IFormFile file, int id)
+        {
+            
+            try
+            {
+                string uniqueFileName = null;
+                string filePath = null;
+                if (file!=null)
+                {
+                    if (Path.GetExtension(file.FileName).ToLower() == ".docx" ||
+                    Path.GetExtension(file.FileName).ToLower() == ".pdf"
+                    )
+                    {
+                        string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "contracts");
+                        uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+                        filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            file.CopyTo(fileStream);
+                        }
+
+
+                        var addKontrate = new PunetoriKontrata
+                        {
+                            PunetoriId = id,
+                            Emri = file.FileName,
+                            Path = filePath,
+                            Status = true,
+                            Created = DateTime.Now,
+                            CreatedBy = user.UserId
+
+                        };
+                        var result = await kontrataRepository.AddAsync(addKontrate);
+                        alertService.Success("Kontrata u shtua me sukses!");
+
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        alertService.Danger("Formati i fajllit eshte gabim, provoni perseri!");
+                        return View();
+                    }
+                }
+                else
+                {
+                    alertService.Danger("Ngarkoni kontraten, provoni perseri!");
+                    return View();
+                }
+
+                
+            }
+            catch (Exception ex)
+            {
+
+                alertService.Danger("Diqka shkoi gabim, provoni perseri!"+ex.InnerException);
+                return View();
+            }
+        }
+
+        
+
         // GET: PunetoriController/Details/5
         public async Task<ActionResult> DetailsAsync(int? id)
         {
             var punetoriDetails = await punetoriRepository.GetPuntoriDetails(id);
 
             var model = new PunetoriListViewModel();
+            model.Id = punetoriDetails.Id;
             model.Emri = punetoriDetails.Emri;
             model.Mbiemri = punetoriDetails.Mbiemri;
             model.NumriPersonal = punetoriDetails.NumriPersonal;
