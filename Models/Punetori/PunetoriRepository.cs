@@ -77,5 +77,10 @@ namespace SMP.Models.Punetori
 
             return search;
         }
+
+        public async Task<Data.Punetori> GetPunetoriByUserId(string UserId)
+        {
+            return await context.Punetori.FirstOrDefaultAsync(q => q.UserId == UserId);
+        }
     }
 }

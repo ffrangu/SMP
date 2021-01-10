@@ -17,5 +17,7 @@ namespace SMP.Models.Punetori
 
         Task<IEnumerable<Data.Punetori>> Search(string value);
 
+        Task<Data.Punetori> GetPunetoriByUserId(string UserId);
+
     }
 }

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29721.120
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMP", "SMP.csproj", "{B02D2187-02F8-4DB8-9FB8-463AA5120D04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMP", "SMP.csproj", "{B02D2187-02F8-4DB8-9FB8-463AA5120D04}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Reports", "..\Reports\Reports.vbproj", "{0DC6F92D-947E-4E1D-B871-CC77B3EB9DB6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B02D2187-02F8-4DB8-9FB8-463AA5120D04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B02D2187-02F8-4DB8-9FB8-463AA5120D04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B02D2187-02F8-4DB8-9FB8-463AA5120D04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DC6F92D-947E-4E1D-B871-CC77B3EB9DB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DC6F92D-947E-4E1D-B871-CC77B3EB9DB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DC6F92D-947E-4E1D-B871-CC77B3EB9DB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DC6F92D-947E-4E1D-B871-CC77B3EB9DB6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

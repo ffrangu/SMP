@@ -19,4 +19,10 @@ namespace SMP.Helpers
         [Description("TaskTree")]
         TaskTree = 3
     }
+
+    public enum Raportet
+    {
+        [Description("Raporti për pagat - tabelare")]
+        PagatTabelare = 1,
+    }
 }
