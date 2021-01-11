@@ -72,7 +72,7 @@ namespace SMP.Controllers
         // GET: PunetoriController
         public async Task<ActionResult> IndexAsync()
         {
-            var punetoret = await punetoriRepository.GetPuntor();
+            var punetoret = await punetoriRepository.GetPuntor(user.KompaniaId);
 
             var listItems = new List<PunetoriListViewModel>();
 

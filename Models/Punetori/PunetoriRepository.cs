@@ -18,7 +18,7 @@ namespace SMP.Models.Punetori
 
         public async Task<SelectList> PunetoretSelectList(int? KompaniaId, string Role)
         {
-            var punetoret = await GetPuntor();
+            var punetoret = await GetPuntor(null);
             var filteredPuntore = new List<Data.Punetori>();
             var returnItems = new List<Data.Punetori>();
             if(Role == "HR")
@@ -42,7 +42,7 @@ namespace SMP.Models.Punetori
 
         }
 
-        public async Task<IEnumerable<Data.Punetori>> GetPuntor()
+        public async Task<IEnumerable<Data.Punetori>> GetPuntor(int? id)
         {
 
 
@@ -52,7 +52,7 @@ namespace SMP.Models.Punetori
                 .Include(x=>x.Pozita)
                 .Include(x=>x.Grada)
                 .Include(x=>x.Banka)
-                .OrderByDescending(x => x.Id).ToListAsync();
+                .Where(x=>id.HasValue?x.KompaniaId == id :true).OrderByDescending(x => x.Id).ToListAsync();
 
             return punetoret;
         }

@@ -9,7 +9,7 @@ namespace SMP.Models.Punetori
 {
     public interface IPunetoriRepository : IGenericRepository<Data.Punetori>
     {
-        Task<IEnumerable<Data.Punetori>> GetPuntor();
+        Task<IEnumerable<Data.Punetori>> GetPuntor(int? id);
 
         Task<SelectList> PunetoretSelectList(int? KompaniaId, string Role);
 
