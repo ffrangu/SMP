@@ -10,16 +10,16 @@ namespace SMP.ViewModels.Raport
     {
         [Required]
         public int RaportiId { get; set; }
-        public int KompaniaId { get; set; }
+        public int? KompaniaId { get; set; }
         public int? PunetoriId { get; set; }
 
         public int? GradaId { get; set; }
 
-        public int BankaId { get; set; }
+        public int? BankaId { get; set; }
 
-        public int Viti { get; set; }
+        public int? Viti { get; set; }
 
-        public int Muaji { get; set; }
+        public int? Muaji { get; set; }
 
     }
 }

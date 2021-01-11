@@ -3,6 +3,7 @@ using SMP.Data;
 using SMP.ViewModels.Paga;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,12 +32,13 @@ namespace SMP.Models.Raport
             }
             else
             {
-                if(KompaniaId.HasValue)
+                if(KompaniaId.Value != 0)
                 {
                     pagat = await context.Paga.Where(q => q.KompaniaId == KompaniaId)
                                               .Include(q => q.Punetori)
                                               .Include(q => q.Punetori.Pozita)
                                               .Include(q => q.Grada)
+                                              .Include(q => q.Punetori.Banka)
                                               .Include(q => q.Kompania).OrderByDescending(q => q.Id).ToListAsync();
                 }
                 else
@@ -78,6 +80,7 @@ namespace SMP.Models.Raport
                                 Pozita = p.Punetori.Pozita.Emri,
                                 Grada = p.Grada.Emri,
                                 Viti = p.Viti,
+                                Muaji = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(p.Muaji),
                                 MuajiInt = p.Muaji,
                                 Bruto = p.Bruto,
                                 Kontributi = p.KontributiPunetori,
@@ -87,6 +90,7 @@ namespace SMP.Models.Raport
                                 Bonuse = p.Bonuse,
                                 BonuseNeto = p.BonuseNeto,
                                 PagaFinale = p.PagaFinale,
+                                Banka = p.Punetori.Banka.Emri
                             }).ToList();
 
             return allPagat;

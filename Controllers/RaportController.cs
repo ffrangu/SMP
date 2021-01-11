@@ -26,8 +26,11 @@ namespace SMP.Controllers
         private IGradaRepository gradaRepository;
         private IBankRepository bankRepository;
         private IRaportRepository raportRepository;
+        private ISession session;
+        private readonly IHttpContextAccessor httpContextAccessor;
+
         public RaportController(IKompaniaRepository _kompaniaRepository, IPunetoriRepository _punetoriRepository, IPagaRepository _pagaRepository,
-            IGradaRepository _gradaRepository, IBankRepository _bankRepository, IRaportRepository _raportRepository,
+            IGradaRepository _gradaRepository, IBankRepository _bankRepository, IRaportRepository _raportRepository, IHttpContextAccessor _httpContextAccessor,
             RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager, AlertService _alertService) 
             : base(_roleManager, _userManager)
         {
@@ -37,6 +40,8 @@ namespace SMP.Controllers
             gradaRepository = _gradaRepository;
             bankRepository = _bankRepository;
             raportRepository = _raportRepository;
+            httpContextAccessor = _httpContextAccessor;
+            session = httpContextAccessor.HttpContext.Session;
         }
 
         // GET: RaportController
@@ -57,26 +62,28 @@ namespace SMP.Controllers
         {
             if(model.RaportiId == (int)Raportet.PagatTabelare)
             {
-                if(User.IsInRole("HR"))
-                {
-
-                }
-                else if(User.IsInRole("User"))
+                if(User.IsInRole("User"))
                 {
                     var punetori = await punetoriRepository.GetPunetoriByUserId(user.UserId);
                     model.PunetoriId = punetori.Id;
                 }
-                else
-                {
-
-                }
 
                 var pagat = await raportRepository.GetAllPagat(model.PunetoriId, model.KompaniaId, model.Viti, model.Muaji, model.BankaId, model.GradaId);
+
+                Models.SessionExtensions.Set(session, "PagatTabelare", pagat);
+                ViewBag.RaportiId = model.RaportiId;
+                return View(pagat);
             }
             else
             {
 
             }
+
+            return null;
+        }
+
+        public async Task<ActionResult> Print(int raportid)
+        {
 
             return null;
         }

@@ -64,6 +64,8 @@ namespace SMP.ViewModels.Paga
         public decimal? BonuseNeto { get; set; }
 
         public int MuajiInt { get; set; }
+
+        public string Banka { get; set; }
     }
 
     public class PagaCreateViewModel

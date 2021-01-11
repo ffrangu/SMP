@@ -31,6 +31,7 @@ using SMP.Models.PunetoriKontrata;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using SMP.Models.Home;
 using SMP.Models.Bonuset;
+using SMP.Models.Raport;
 
 namespace SMP
 {
@@ -131,6 +132,7 @@ namespace SMP
             services.AddScoped<IPunetoriKontrataRepository, PunetoriKontrataRepository>();
             services.AddScoped<IHomeRepository, HomeRepository>();
             services.AddScoped<IBonusetRepository, BonusetRepository>();
+            services.AddScoped<IRaportRepository, RaportRepository>();
 
 
 

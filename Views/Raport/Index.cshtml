@@ -1,5 +1,8 @@
 ﻿@model RaportViewModel
+@{
+    ViewData["Title"] = "Shfleto raportet";
 
+}
 
 <div class="card card-custom gutter-b">
     <div class="card-header flex-wrap py-3">
@@ -65,6 +68,10 @@
     </div>
 </div>
 
+<div id="load-result">
+
+</div>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 
@@ -90,10 +97,11 @@
                 url: "@Url.Action("GenerateReport", "Raport")",
                 cache: false,
                 type: "POST",
-                dataType: "json",
+                dataType: "html",
                 data: obj,
                 success: function (rs) {
-
+                    hideLoading();
+                    $("#load-result").html(rs);
                 },
                 error: function (jqXHR, error, errorThrown) {
                     if (jqXHR.status && jqXHR.status == 400) {
