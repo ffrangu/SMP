@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -28,9 +29,10 @@ namespace SMP.Controllers
         private IRaportRepository raportRepository;
         private ISession session;
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IWebHostEnvironment webHostEnvironment;
 
         public RaportController(IKompaniaRepository _kompaniaRepository, IPunetoriRepository _punetoriRepository, IPagaRepository _pagaRepository,
-            IGradaRepository _gradaRepository, IBankRepository _bankRepository, IRaportRepository _raportRepository, IHttpContextAccessor _httpContextAccessor,
+            IGradaRepository _gradaRepository, IBankRepository _bankRepository, IRaportRepository _raportRepository, IHttpContextAccessor _httpContextAccessor, IWebHostEnvironment _webHostEnvironment,
             RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager, AlertService _alertService) 
             : base(_roleManager, _userManager)
         {
@@ -42,6 +44,8 @@ namespace SMP.Controllers
             raportRepository = _raportRepository;
             httpContextAccessor = _httpContextAccessor;
             session = httpContextAccessor.HttpContext.Session;
+            webHostEnvironment = _webHostEnvironment;
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
         }
 
         // GET: RaportController
@@ -84,7 +88,7 @@ namespace SMP.Controllers
 
         public async Task<ActionResult> Print(int raportid)
         {
-
+             
             return null;
         }
 
